@@ -8,7 +8,6 @@ import urllib
 import xml.etree.ElementTree as ET
 import os
 from util import settings
-from sets import Set
 from pymongo import MongoClient
 from beaker.middleware import SessionMiddleware
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,7 +24,7 @@ db = mongo.compapp
 namespaces = {'cf': 'http://ns.medbiq.org/competencyframework/v1/',
 			  'lom': 'http://ltsc.ieee.org/xsd/LOM'}
 
-knownframeworkurls = Set(['http://adlnet.gov/competency-framework/computer-science/basic-programming'])
+knownframeworkurls = set(['http://adlnet.gov/competency-framework/computer-science/basic-programming'])
 
 @bottle.route('/')
 def index():
