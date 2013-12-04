@@ -8,6 +8,7 @@ import urllib
 import xml.etree.ElementTree as ET
 import os
 from util import settings
+from sets import Set
 from pymongo import MongoClient
 from beaker.middleware import SessionMiddleware
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,14 +25,20 @@ db = mongo.compapp
 namespaces = {'cf': 'http://ns.medbiq.org/competencyframework/v1/',
 			  'lom': 'http://ltsc.ieee.org/xsd/LOM'}
 
-theonlycomprightnow = 'http://adlnet.gov/competency-framework/computer-science/basic-programming'
+knownframeworkurls = Set(['http://adlnet.gov/competency-framework/computer-science/basic-programming'])
 
 @bottle.route('/')
 def index():
 	s = request.environ.get('beaker.session')
 	# for uri in knownuris:
-	fwk = getComp(theonlycomprightnow)
-	return template('./templates/index', fwks=[fwk], username=s.get('username', None), error=None)
+	fwks = []
+	form_fwkurl = request.forms.get('frameworkurl', None)
+	if form_fwkurl:
+		knownframeworkurls.add(form_fwkurl)
+	for url in knownframeworkurls:
+		print url
+		fwks.append(getComp(url))
+	return template('./templates/index', fwks=fwks, username=s.get('username', None), error=None)
 
 @bottle.route('/me')
 def me():

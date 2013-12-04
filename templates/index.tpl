@@ -12,16 +12,35 @@
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+<style>
+.btn-alt {
+  color:#999;
+  background: #222;
+}
+.btn-alt:hover, .btn-alt:focus {
+	color:#eee;
+	background-color: #222;
+	background-position: 0 -15px;
+}
+</style>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 <a class="navbar-brand" href="/">Competency</a>
+	<form class="navbar-form navbar-right" role="form" method="post">
+		<div class="form-group">
+			<label class="sr-only" for="frameworkurl">framework url</label>
+			<input type="text" class="form-control" name="frameworkurl" id="frameworkurl" placeholder="Framework URL">
+		</div>
+		<button type="submit" class="btn btn-alt navbar-button">Add framework</button>
+	</form>
 </nav>
 <div class="jumbotron">
 	<div class="container">
 		<h1>Welcome to the Competency Demo</h1>
 		<p>This app demonstrates using MedBiquitous' Competency Framework and the Experience API to create and track
 		compentencies.</p>
+		
 	</div>
 </div>
 <div class="container">
