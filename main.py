@@ -24,14 +24,21 @@ db = mongo.compapp
 namespaces = {'cf': 'http://ns.medbiq.org/competencyframework/v1/',
 			  'lom': 'http://ltsc.ieee.org/xsd/LOM'}
 
-theonlycomprightnow = 'http://adlnet.gov/competency-framework/computer-science/basic-programming'
+knownframeworkurls = set(['http://adlnet.gov/competency-framework/computer-science/basic-programming'])
 
-@bottle.route('/')
+@bottle.route('/', method='GET')
+@bottle.route('/', method='POST')
 def index():
 	s = request.environ.get('beaker.session')
 	# for uri in knownuris:
-	fwk = getComp(theonlycomprightnow)
-	return template('./templates/index', fwks=[fwk], username=s.get('username', None), error=None)
+	# fwks = []
+	form_fwkurl = request.forms.get('frameworkurl', None)
+	if form_fwkurl:
+		knownframeworkurls.add(form_fwkurl)
+	for url in knownframeworkurls:
+		getComp(url)
+
+	return template('./templates/index', fwks=getComps(), username=s.get('username', None), error=None)
 
 @bottle.route('/me')
 def me():
@@ -242,6 +249,9 @@ def getUserCompsById(theid, username):
 	result = db.usercomps.map_reduce(mapfunc, reducefunc, "myresults")
 	return [d['value'] for d in result.find()]
 
+def getComps():
+	return db.compfwk.find(fields={'_id': False})
+
 #workin on it
 # def updateCompFwkStatus(username, fwkuri):
 # 	# go get statements in the LRS that reference this competency framework
@@ -280,7 +290,8 @@ def getComp(compuri, user=None):
 			comp = getComp(compuri)
 			saveComp(comp, user)
 			return comp
-
+	
+	fixed = compuri if not compuri.endswith('.xml') else compuri[:-4]
 	comp = db.compfwk.find_one({"entry":compuri}, {"_id":0})
 	if comp:
 		return comp
@@ -366,11 +377,6 @@ def getcatalog(xml):
 	return xml.find('lom:lom/lom:general/lom:identifier/lom:catalog', namespaces=namespaces).text
 
 def getentry(xml):
-	## temp fix
-	# entry = xml.find('lom:lom/lom:general/lom:identifier/lom:entry', namespaces=namespaces).text
-	# if entry == 'http://adlnet.gov/competency-frameworks/computer-science/basic-programming':
-	# 	entry = 'http://adlnet.gov/competency-framework/computer-science/basic-programming'
-	# return entry
 	return xml.find('lom:lom/lom:general/lom:identifier/lom:entry', namespaces=namespaces).text
 
 def gettitle(xml):
