@@ -30,14 +30,14 @@ knownframeworkurls = set(['http://adlnet.gov/competency-framework/computer-scien
 def index():
 	s = request.environ.get('beaker.session')
 	# for uri in knownuris:
-	fwks = []
+	# fwks = []
 	form_fwkurl = request.forms.get('frameworkurl', None)
 	if form_fwkurl:
 		knownframeworkurls.add(form_fwkurl)
 	for url in knownframeworkurls:
-		print url
-		fwks.append(getComp(url))
-	return template('./templates/index', fwks=fwks, username=s.get('username', None), error=None)
+		getComp(url)
+
+	return template('./templates/index', fwks=getComps(), username=s.get('username', None), error=None)
 
 @bottle.route('/me')
 def me():
@@ -248,6 +248,9 @@ def getUserCompsById(theid, username):
 	result = db.usercomps.map_reduce(mapfunc, reducefunc, "myresults")
 	return [d['value'] for d in result.find()]
 
+def getComps():
+	return db.compfwk.find(fields={'_id': False})
+
 #workin on it
 # def updateCompFwkStatus(username, fwkuri):
 # 	# go get statements in the LRS that reference this competency framework
@@ -372,11 +375,6 @@ def getcatalog(xml):
 	return xml.find('lom:lom/lom:general/lom:identifier/lom:catalog', namespaces=namespaces).text
 
 def getentry(xml):
-	## temp fix
-	# entry = xml.find('lom:lom/lom:general/lom:identifier/lom:entry', namespaces=namespaces).text
-	# if entry == 'http://adlnet.gov/competency-frameworks/computer-science/basic-programming':
-	# 	entry = 'http://adlnet.gov/competency-framework/computer-science/basic-programming'
-	# return entry
 	return xml.find('lom:lom/lom:general/lom:identifier/lom:entry', namespaces=namespaces).text
 
 def gettitle(xml):
