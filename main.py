@@ -26,7 +26,8 @@ namespaces = {'cf': 'http://ns.medbiq.org/competencyframework/v1/',
 
 knownframeworkurls = set(['http://adlnet.gov/competency-framework/computer-science/basic-programming'])
 
-@bottle.route('/')
+@bottle.route('/', method='GET')
+@bottle.route('/', method='POST')
 def index():
 	s = request.environ.get('beaker.session')
 	# for uri in knownuris:
@@ -289,7 +290,9 @@ def getComp(compuri, user=None):
 			comp = getComp(compuri)
 			saveComp(comp, user)
 			return comp
-
+	
+	fixed = compuri if not compuri.endswith('.xml') else compuri[:-4]
+	print ".... looking for %s" % fixed
 	comp = db.compfwk.find_one({"entry":compuri}, {"_id":0})
 	if comp:
 		return comp
@@ -304,6 +307,7 @@ def saveComp(comp, user=None):
 		comp['username'] = user
 		db.usercomps.insert(comp)
 	else:
+		print ".............  calling save on fwk"
 		db.compfwk.insert(comp)
 
 def updateComp(comp, username=None):
