@@ -292,7 +292,6 @@ def getComp(compuri, user=None):
 			return comp
 	
 	fixed = compuri if not compuri.endswith('.xml') else compuri[:-4]
-	print ".... looking for %s" % fixed
 	comp = db.compfwk.find_one({"entry":compuri}, {"_id":0})
 	if comp:
 		return comp
@@ -307,7 +306,6 @@ def saveComp(comp, user=None):
 		comp['username'] = user
 		db.usercomps.insert(comp)
 	else:
-		print ".............  calling save on fwk"
 		db.compfwk.insert(comp)
 
 def updateComp(comp, username=None):
