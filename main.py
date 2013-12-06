@@ -51,14 +51,25 @@ def me():
 		c = getComp(theid, user=username)
 		return template('./templates/comp', username=username, fwk=c)
 
-	update = request.params.get('update', None)
-	if update:
-		updateCompFwkStatus(username, update)
-		c = getComp(update, user=username)
-		return template('./templates/comp', username=username, fwk=c)
-
 	mycomps = getmycomps(username)
 	return template('./templates/me', fwks=mycomps, username=username, error=None)
+
+@bottle.post('/update')
+def updatecomp():
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username: 
+		redirect('/login')
+	endpoint = request.forms.get('endpoint', None)
+	auth = "Basic %s" % base64.b64encode("%s:%s" % (request.forms.get('name', None), request.forms.get('password', None)))
+	fwkid = request.forms.get('fwkid', None)
+	
+	c = getComp(fwkid, user=username)
+	updateCompFwkStatus(username, c, endpoint+"statements", auth)
+
+	c = getComp(fwkid, user=username)
+
+	return template('./templates/comp', username=username, fwk=c)
 
 @bottle.get('/login')
 def getlogin():
@@ -107,13 +118,15 @@ def gettest():
 	username = s.get('username',None)
 	if not username:
 		redirect('/login')
-	theid = request.params.get('compid')
-	if not theid:
+	fwkid = request.params.get('fwkid', None)
+	theid = request.params.get('compid', None)
+	if not theid and not fwkid:
 		redirect('/')
-	return template('./templates/test.tpl', compid=theid, user=username)
+	return template('./templates/test.tpl', compid=theid, fwkid=fwkid, user=username)
 
 @bottle.post('/test')
 def posttest():
+	fwkid = request.forms.get('fwkid')
 	theid = request.forms.get('compid')
 	s = request.environ.get('beaker.session')
 	username = s.get('username',None)
@@ -137,7 +150,7 @@ def posttest():
 
 	post_resp = requests.post(settings.LRS_STATEMENT_ENDPOINT, data=json.dumps(data), headers=settings.HEADERS, verify=False)
 
-	query_string = '?verb={0}&activity={1}&related_activities={2}'.format('http://adlnet.gov/expapi/verbs/passed', theid, 'True')
+	query_string = '?verb={0}&activity={1}&related_activities={2}'.format('http://adlnet.gov/expapi/verbs/passed', theid, 'true')
 
 	get_resp = requests.get(settings.LRS_STATEMENT_ENDPOINT + query_string , headers=settings.HEADERS, verify=False)
 
@@ -158,7 +171,8 @@ def posttest():
 		achieved_data = {
 			'actor': {'mbox':user['email'], 'name':user['name']},
 			'verb': {'id': 'http://adlnet.gov/expapi/verbs/achieved', 'display':{'en-US': 'achieved'}},
-			'object':{'id': theid}
+			'object':{'id': theid},
+			'context':{'contextActivities':{'parent':[{'id':fwkid}]}}
 			}	
 		post_resp = requests.post(settings.LRS_STATEMENT_ENDPOINT, data=json.dumps(achieved_data), headers=settings.HEADERS, verify=False)
 		
@@ -210,6 +224,26 @@ def setAchievement(theid, username, single=None):
 		if not single:
 			updateComp(comp, username)
 
+def setAchievements(fwkcomp, ids, username, subfwk=False):
+	for comp in fwkcomp['competencies']:
+		if comp['entry'] in ids:
+			comp['met'] = True
+			comp['date'] = datetime.datetime.utcnow()
+
+		if comp.get('competencies', False):
+			for c in comp['competencies']:
+				setAchievements(comp, ids, username, True)
+
+		if rollup(comp):
+			comp['met'] = True
+			comp['date'] = datetime.datetime.utcnow()
+
+	if not subfwk:
+		if rollup(fwkcomp):
+			fwkcomp['met'] = True
+			fwkcomp['date'] = datetime.datetime.utcnow()
+		updateComp(fwkcomp, username)
+
 def rollup(comp):
 	res = True
 	if comp.get('competencies', False):
@@ -253,30 +287,65 @@ def getComps():
 	return db.compfwk.find(fields={'_id': False})
 
 #workin on it
-# def updateCompFwkStatus(username, fwkuri):
-# 	# go get statements in the LRS that reference this competency framework
-# 	# statements don't reference competency frameworks, they reference competencies
-# 	comp = getComp(fwkuri, username)
-# 	if comp:
-# 		if getCompStmtsFor(username, fwkuri):
-# 			comp['met'] = True
-# 			comp['date'] = datetime.datetime.utcnow()
-# 			achieved = True
+def updateCompFwkStatus(username, fwk, endpoint, auth):
+	headers = {        
+	            'Authorization': auth,
+	            'content-type': 'application/json',        
+	            'X-Experience-API-Version': '1.0.0'
+	    		}
 
-		
-# 	if achieved:
-# 		setAchievement(fwkuri, username)
+	# if framework comp ['met'] is true: return... everything is already met
+	if fwk.get('met', False):
+		return
+	# request achieved with fwk uri and related activities
+	mbox = db.users.find_one({"username":username})['email']
+	actor = urllib.quote_plus(json.dumps({'mbox':mbox}))
+	query_string = '?agent={0}&verb={1}&activity={2}&related_activities={3}'
+	achievedverb = 'http://adlnet.gov/expapi/verbs/achieved'
+	fwkentry = fwk['encodedentry']
+	achievedquery = query_string.format(actor,achievedverb, fwkentry, 'true')
 
+	get_resp = requests.get(endpoint + achievedquery , headers=headers, verify=False)
+	if get_resp.status_code != 200:
+		return
+	achieved_ids = [s['object']['id'] for s in json.loads(get_resp.content)['statements']]
+	# for each competency see if there is an id in the achieved array of statements that matches
+	setAchievements(fwk, achieved_ids, username)
 
-# def getCompStmtsFor(username, compuri):
-# 	mbox = db.users.find_one({"username":username})['email']
-# 	actor = {'mbox':mbox}
-# 	query_string = '?agent={0}&verb={1}&activity={2}&related_activities={3}'.format(urllib.quote_plus(json.dumps(actor)),'http://adlnet.gov/expapi/verbs/achieved', compuri, 'True')
+	updateCompetency(fwk, username, actor, headers, endpoint)
 
-# 	get_resp = requests.get(settings.LRS_STATEMENT_ENDPOINT + query_string , headers=settings.HEADERS, verify=False)
+# now we wanna find 'passed' statements for each competency
+def updateCompetency(fwkcomp, username, actor, headers, endpoint, subfwk=False):
+	query_string = '?agent={0}&verb={1}&activity={2}&related_activities={3}'
+	passedverb = 'http://adlnet.gov/expapi/verbs/passed'
 
-# 	results = json.loads(get_resp.content)
-# 	return results.get('statements',[])
+	for comp in fwkcomp['competencies']:
+		if comp.get('met', False):
+			continue
+
+		if comp.get('competencies', False):
+			updateCompetency(comp, username, actor, headers, endpoint, True)
+			if rollup(comp):
+				comp['met'] = True
+				comp['date'] = datetime.datetime.utcnow()	
+
+		compentry = comp['encodedentry']
+		passedquery = query_string.format(actor,passedverb, compentry, 'true')
+
+		get_resp = requests.get(endpoint + passedquery , headers=headers, verify=False)
+		if get_resp.status_code != 200:
+			return
+
+		if json.loads(get_resp.content).get('statements', False):
+			comp['met'] = True
+			comp['date'] = datetime.datetime.utcnow()
+
+	# after all of that, do rollup.. see if all competencies in a framework are met, if so set fwk met
+	if not subfwk:
+		if rollup(fwkcomp):
+			fwkcomp['met'] = True
+			fwkcomp['date'] = datetime.datetime.utcnow()
+		updateComp(fwkcomp, username)
 
 def getUsersComps(username):
 	return db.usercomps.find({"username":username})	
