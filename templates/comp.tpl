@@ -30,6 +30,23 @@
 			<!-- work in progress
 			<p><a href="/me?update={{fwk['encodedentry']}}" class="btn btn-primary" role="button">Check for Updates</a></p>
 			-->
+			<form class="form-inline" role="form" method="post" action="/update">
+				<input type="hidden" name="fwkid" class="form-control" value="{{fwk['entry']}}">
+				<div class="form-group">
+					<label class="sr-only" for="endpoint">LRS Endpoint</label>
+					<input type="text" class="form-control" name="endpoint" id="endpoint" placeholder="http://lrs.adlnet.gov/xapi/">
+				</div>
+				<br>
+				<div class="form-group">
+					<label class="sr-only" for="email">Basic Auth Name</label>
+					<input type="text" class="form-control" name="name" id="name" placeholder="name">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="name">Basic Auth Password</label>
+					<input type="password" class="form-control" name="password" id="password" placeholder="password">
+				</div>
+				<button type="submit" class="btn btn-default">Update</button>
+			</form>
 			%end
 		%end
 	</div>
@@ -63,7 +80,7 @@
 						<div class="panel panel-default">
 							<div class="panel-heading alert-info">
 					%end
-							<a href="./test?compid={{subcomp['encodedentry']}}" class="alert-link">{{subcomp['title']}}</a></div>
+							<a href="./test?compid={{subcomp['encodedentry']}}&fwkid={{fwk['encodedentry']}}" class="alert-link">{{subcomp['title']}}</a></div>
 							<div class="panel-body">
 								{{subcomp['description']}}
 							</div>
@@ -82,7 +99,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading alert-info">
 				%end
-						<a href="./test?compid={{comp['encodedentry']}}" class="alert-link">{{comp['title']}}</a></div>
+						<a href="./test?compid={{comp['encodedentry']}}&fwkid={{fwk['encodedentry']}}" class="alert-link">{{comp['title']}}</a></div>
 						<div class="panel-body">
 							{{comp['description']}}
 						</div>
