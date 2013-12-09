@@ -11,6 +11,7 @@ from util import settings
 from pymongo import MongoClient
 from beaker.middleware import SessionMiddleware
 from werkzeug.security import generate_password_hash, check_password_hash
+from bottle import static_file
 
 session_opts = {
 	'session.type': 'memory',
@@ -39,6 +40,10 @@ def index():
 		getComp(url)
 
 	return template('./templates/index', fwks=getComps(), username=s.get('username', None), error=None)
+
+@bottle.route('/js/<filename:re:.*\.js>')
+def send_js(filename):
+    return static_file(filename, root='./js', mimetype='text/javascript')
 
 @bottle.route('/me')
 def me():
@@ -122,6 +127,13 @@ def gettest():
 	theid = request.params.get('compid', None)
 	if not theid and not fwkid:
 		redirect('/')
+	# i would expect some sort of recommender to figure out what to deliver
+	# for demonstration purposes, we either deliver video or a simple default 'test' page
+	if fwkid == 'http://adlnet.gov/competency-framework/scorm/choosing-an-lms':
+		user = db.users.find_one({"username":username})
+		actor = {'mbox':user['email'], 'name':user['name']}
+		user = db.users.find_one({"username":username})
+		return template('./templates/demo_video.tpl', compid=theid, fwkid=fwkid, user=username, actor=json.dumps(actor), vidurl=settings.DEMO_VIDEOS[theid], email=user['email'])
 	return template('./templates/test.tpl', compid=theid, fwkid=fwkid, user=username)
 
 @bottle.post('/test')
@@ -140,20 +152,23 @@ def posttest():
 	actor = {'mbox':user['email'], 'name':user['name']}
 
 	# here would be some sort of evaluation
+	evaluated = request.forms.get('evaluated', False)
 	
-	data = {
-		'actor': actor,
-		'verb': {'id': 'http://adlnet.gov/expapi/verbs/passed', 'display':{'en-US': 'passed'}},
-		'object':{'id': 'some:activity_id_foo'},
-		'context':{'contextActivities':{'other':[{'id':theid}]}}
-		}
+	if not evaluated:
+		data = {
+			'actor': actor,
+			'verb': {'id': 'http://adlnet.gov/expapi/verbs/passed', 'display':{'en-US': 'passed'}},
+			'object':{'id': 'some:activity_id_foo'},
+			'context':{'contextActivities':{'other':[{'id':theid}]}}
+			}
 
-	post_resp = requests.post(settings.LRS_STATEMENT_ENDPOINT, data=json.dumps(data), headers=settings.HEADERS, verify=False)
+		post_resp = requests.post(settings.LRS_STATEMENT_ENDPOINT, data=json.dumps(data), headers=settings.HEADERS, verify=False)
+
 
 	query_string = '?verb={0}&activity={1}&related_activities={2}'.format('http://adlnet.gov/expapi/verbs/passed', theid, 'true')
 
 	get_resp = requests.get(settings.LRS_STATEMENT_ENDPOINT + query_string , headers=settings.HEADERS, verify=False)
-
+	
 	results = json.loads(get_resp.content)
 	stmt_results = results['statements']
 

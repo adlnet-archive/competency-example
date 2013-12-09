@@ -1,2 +1,2 @@
-competency-example
+ADL xAPI / Medbiquitous Competency Example
 ==================
