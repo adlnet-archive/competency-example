@@ -41,41 +41,6 @@ def index():
 
 	return template('./templates/index', fwks=getComps(), username=s.get('username', None), error=None)
 
-@bottle.route('/js/<filename:re:.*\.js>')
-def send_js(filename):
-    return static_file(filename, root='./js', mimetype='text/javascript')
-
-@bottle.route('/me')
-def me():
-	s = request.environ.get('beaker.session')
-	username = s.get('username',None)
-	if not username: 
-		redirect('/login')
-	theid = request.params.get('uri', None)
-	if theid:
-		c = getComp(theid, user=username)
-		return template('./templates/comp', username=username, fwk=c)
-
-	mycomps = getmycomps(username)
-	return template('./templates/me', fwks=mycomps, username=username, error=None)
-
-@bottle.post('/update')
-def updatecomp():
-	s = request.environ.get('beaker.session')
-	username = s.get('username',None)
-	if not username: 
-		redirect('/login')
-	endpoint = request.forms.get('endpoint', None)
-	auth = "Basic %s" % base64.b64encode("%s:%s" % (request.forms.get('name', None), request.forms.get('password', None)))
-	fwkid = request.forms.get('fwkid', None)
-	
-	c = getComp(fwkid, user=username)
-	updateCompFwkStatus(username, c, endpoint+"statements", auth)
-
-	c = getComp(fwkid, user=username)
-
-	return template('./templates/comp', username=username, fwk=c)
-
 @bottle.get('/login')
 def getlogin():
 	s = request.environ.get('beaker.session')
@@ -117,6 +82,37 @@ def getlogout():
 		s.invalidate()
 	redirect('/login')
 
+@bottle.route('/me')
+def me():
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username: 
+		redirect('/login')
+	theid = request.params.get('uri', None)
+	if theid:
+		c = getComp(theid, user=username)
+		return template('./templates/comp', username=username, fwk=c)
+
+	mycomps = getmycomps(username)
+	return template('./templates/me', fwks=mycomps, username=username, error=None)
+
+@bottle.post('/update')
+def updatecomp():
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username: 
+		redirect('/login')
+	endpoint = request.forms.get('endpoint', None)
+	auth = "Basic %s" % base64.b64encode("%s:%s" % (request.forms.get('name', None), request.forms.get('password', None)))
+	fwkid = request.forms.get('fwkid', None)
+	
+	c = getComp(fwkid, user=username)
+	updateCompFwkStatus(username, c, endpoint+"statements", auth)
+
+	c = getComp(fwkid, user=username)
+
+	return template('./templates/comp', username=username, fwk=c)
+
 @bottle.get('/test')
 def gettest():
 	s = request.environ.get('beaker.session')
@@ -127,13 +123,16 @@ def gettest():
 	theid = request.params.get('compid', None)
 	if not theid and not fwkid:
 		redirect('/')
-	# i would expect some sort of recommender to figure out what to deliver
-	# for demonstration purposes, we either deliver video or a simple default 'test' page
+	# because this is a demo, we pick with framework we can 
+	# do a LR lookup on
 	if fwkid == 'http://adlnet.gov/competency-framework/scorm/choosing-an-lms':
 		user = db.users.find_one({"username":username})
 		actor = {'mbox':user['email'], 'name':user['name']}
-		user = db.users.find_one({"username":username})
-		return template('./templates/demo_video.tpl', compid=theid, fwkid=fwkid, user=username, actor=json.dumps(actor), vidurl=settings.DEMO_VIDEOS[theid], email=user['email'])
+		# user = db.users.find_one({"username":username})
+		# return template('./templates/demo_video.tpl', compid=theid, fwkid=fwkid, user=username, actor=json.dumps(actor), vidurl=settings.DEMO_VIDEOS[theid], email=user['email'])
+		urls = getContentURLsFromLR(theid)
+		if urls:
+			return template('./templates/videolist.tpl', user=username, compid=theid, actor=json.dumps(actor), urls=urls)
 	return template('./templates/test.tpl', compid=theid, fwkid=fwkid, user=username)
 
 @bottle.post('/test')
@@ -201,10 +200,9 @@ def reset():
 	s.invalidate()
 	mongo.drop_database(db)
 
-def getmycomps(username):
-	# get my comps from db.usercomps
-	cursor = db.usercomps.find({"username":username}, {"_id":0})
-	return [c for c in cursor]
+@bottle.route('/js/<filename:re:.*\.js>')
+def send_js(filename):
+    return static_file(filename, root='./js', mimetype='text/javascript')
 
 
 # same comp could be in more than
@@ -268,40 +266,6 @@ def rollup(comp):
 		res = comp.get('met', False)
 	return res
 
-def getUserCompsById(theid, username):
-	mapfunc = """
-	function(){
-	  function dfs(node){
-		  //emit(node.url, node.my_id)
-		  if (node.entry === "%s") {
-			return true;
-		  }
-		  else {
-			for(var i in node.competencies) {
-			  if (dfs(node.competencies[i])) {
-				return true;
-			  }
-			}
-		  }
-		  return false;
-	  }
-	  if (this.username === "%s" && dfs(this)) {
-		emit(this._id, this)
-	  }
-	}
-	""" % (theid, username)
-	#function(key, values){return JSON.stringify(values);}
-	reducefunc = """
-	function(key, values){return values;}
-	"""
-
-	result = db.usercomps.map_reduce(mapfunc, reducefunc, "myresults")
-	return [d['value'] for d in result.find()]
-
-def getComps():
-	return db.compfwk.find(fields={'_id': False})
-
-#workin on it
 def updateCompFwkStatus(username, fwk, endpoint, auth):
 	headers = {        
 	            'Authorization': auth,
@@ -362,8 +326,47 @@ def updateCompetency(fwkcomp, username, actor, headers, endpoint, subfwk=False):
 			fwkcomp['date'] = datetime.datetime.utcnow()
 		updateComp(fwkcomp, username)
 
+
 def getUsersComps(username):
 	return db.usercomps.find({"username":username})	
+
+def getUserCompsById(theid, username):
+	mapfunc = """
+	function(){
+	  function dfs(node){
+		  //emit(node.url, node.my_id)
+		  if (node.entry === "%s") {
+			return true;
+		  }
+		  else {
+			for(var i in node.competencies) {
+			  if (dfs(node.competencies[i])) {
+				return true;
+			  }
+			}
+		  }
+		  return false;
+	  }
+	  if (this.username === "%s" && dfs(this)) {
+		emit(this._id, this)
+	  }
+	}
+	""" % (theid, username)
+	#function(key, values){return JSON.stringify(values);}
+	reducefunc = """
+	function(key, values){return values;}
+	"""
+
+	result = db.usercomps.map_reduce(mapfunc, reducefunc, "myresults")
+	return [d['value'] for d in result.find()]
+
+def getmycomps(username):
+	# get my comps from db.usercomps
+	cursor = db.usercomps.find({"username":username}, {"_id":0})
+	return [c for c in cursor]
+
+def getComps():
+	return db.compfwk.find(fields={'_id': False})
 
 def getComp(compuri, user=None):
 	if user:
@@ -397,6 +400,21 @@ def updateComp(comp, username=None):
 		db.usercomps.update({"username":comp['username'], "entry":comp['entry']}, comp)
 	else:
 		db.compfwk.update({"entry":comp['entry']}, comp)
+
+def getContentURLsFromLR(compuri):
+	# get ids of documents w/ uri
+	#https://node01.public.learningregistry.net/slice?any_tags=http://www.adlnet.gov/competency/scorm/choosing-an-lms/part3
+	#####!!!!!!! hack
+	compuri = compuri[:7] + 'www.' + compuri[7:]
+	#####!!!!!!!! end hack
+	url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
+	resp = requests.get(url)
+	if resp.status_code != 200:
+		return None
+	lrresults = json.loads(resp.content)
+	if lrresults['resultCount'] < 1:
+		return None
+	return [s['resource_data_description']['resource_locator'] for s in lrresults['documents']]
 
 def parsecompetencies(uri):
 	# cuz our xml is hosted with .xml right now

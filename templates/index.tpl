@@ -35,15 +35,10 @@
 		<button type="submit" class="btn btn-alt navbar-button">Add framework</button>
 	</form>
 </nav>
-<div class="jumbotron">
-	<div class="container">
-		<h1>Welcome to the Competency Demo</h1>
-		<p>This app demonstrates using MedBiquitous' Competency Framework and the Experience API to create and track
-		compentencies.</p>
-		
-	</div>
-</div>
 <div class="container">
+	<div class="page-header">
+		<h1>Competency Demo <small>Demonstrating MedBiquitous' Competency Framework and the Experience API</small></h1>
+	</div>
 	<div class="row">
 		<div class="col-xs-12">
 		%if username:
