@@ -30,7 +30,7 @@
             ADL.XAPIWrapper.lrs['actor'] = {"mbox":"{{email}}", "name":"{{user}}"}
             $("#sub").hide()
 
-        var comp = Popcorn.youtube("#compvid", "http://www.youtube.com/watch?v=tlBbt5niQto");
+        var comp = Popcorn.youtube("#compvid", "{{vidurl}}");
         ADL.XAPIVideo.addVideo(comp, "{{compid}}");
 
         comp.on("ended", function(){
