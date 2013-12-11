@@ -12,35 +12,49 @@
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+<script>    
+    $(document).ready(function(){
+        $("#emailfield").hide()
+        $("#fullnamefield").hide()
+        $("#newbutton").click(function(event){
+        	$("#emailfield").show()
+        	$("#fullnamefield").show()        	
+        	$("#newbutton").hide()
+        	event.preventDefault()
+        });
+    });
+</script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 <a class="navbar-brand" href="/">Competency</a>
 </nav>
 <div class="container">
-	<p>Enter a username and password. If they are new, it'll create them</p>
+	<p>Enter a username and password</p>
 	%if error:
 		<div class="alert alert-danger">{{error}}</div>
 	%end
-	<form class="form-inline" role="form" method="post">
+	<form class="form-inline" role="form" method="post" action="/login" id="newform">
+		<div class="form-group" id="emailfield">
+			<label class="sr-only" for="email">Email</label>
+			<input type="email" class="form-control" name="email" id="email" placeholder="Email">
+		</div>
+		<div class="form-group" id="fullnamefield">
+			<label class="sr-only" for="name">Full Name</label>
+			<input type="text" class="form-control" name="name" id="name" placeholder="Full Name">
+		</div>
 		<div class="form-group">
-			<label class="sr-only" for="username">username</label>
-			<input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+			<label class="sr-only" for="username">Username</label>
+			<input type="text" class="form-control" name="username" id="username" placeholder="Username">
 		</div>
 		<div class="form-group">
 			<label class="sr-only" for="password">Password</label>
 			<input type="password" class="form-control" name="password" id="password" placeholder="Password">
-		</div>
-		<p>New? Add your email and name.</p>
-		<div class="form-group">
-			<label class="sr-only" for="email">username</label>
-			<input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
-		</div>
-		<div class="form-group">
-			<label class="sr-only" for="name">username</label>
-			<input type="text" class="form-control" name="name" id="name" placeholder="Enter name">
-		</div>
+		</div>			
 		<button type="submit" class="btn btn-default">Sign in</button>
+		<br>
+		<br>
+		<button type="submit" class="btn btn-default" id="newbutton">New?</button>
 	</form>
 </div>
 </body>

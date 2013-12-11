@@ -17,6 +17,7 @@ session_opts = {
 	'session.type': 'memory',
 	'session.auto': True
 }
+
 app = SessionMiddleware(bottle.app(), session_opts)
  
 mongo = MongoClient()
@@ -25,21 +26,30 @@ db = mongo.compapp
 namespaces = {'cf': 'http://ns.medbiq.org/competencyframework/v1/',
 			  'lom': 'http://ltsc.ieee.org/xsd/LOM'}
 
-knownframeworkurls = set(['http://adlnet.gov/competency-framework/computer-science/basic-programming'])
+@bottle.route('/js/<filename:re:.*\.js>')
+def send_js(filename):
+    return static_file(filename, root='./js', mimetype='text/javascript')
 
 @bottle.route('/', method='GET')
 @bottle.route('/', method='POST')
 def index():
 	s = request.environ.get('beaker.session')
-	# for uri in knownuris:
-	# fwks = []
 	form_fwkurl = request.forms.get('frameworkurl', None)
+	knownframeworkurls = set()
+
 	if form_fwkurl:
 		knownframeworkurls.add(form_fwkurl)
 	for url in knownframeworkurls:
 		getComp(url)
+	
+	test = getComps()
+	for c in test:
+		print c
 
-	return template('./templates/index', fwks=getComps(), username=s.get('username', None), error=None)
+	username = s.get('username', None)
+	num_user_comps = len(getmycomps(username))
+
+	return template('./templates/index', fwks=getComps(), username=username, comps=num_user_comps, error=None)
 
 @bottle.get('/login')
 def getlogin():
@@ -54,18 +64,23 @@ def postlogin():
 	s = request.environ.get('beaker.session')
 	username = request.forms.get('username', None)
 	pwd = request.forms.get('password', None)
+	
 	if not username or not pwd:
-		return template('./templates/login', error="username or password was missing")
+		return template('./templates/login', error="Username or password was missing")
+	
 	users = db.users
 	user = users.find_one({"username":username})
+	
 	if user:
 		if not check_password_hash(user['pwd'], pwd):
 			return template('./templates/login', error="Username exists and password didn't match")
 	else:
 		email = request.forms.get('email', None)
 		name = request.forms.get('name', None)
+		
 		if not email or not name:
-			return template('./templates/login', error="email or name was missing")
+			return template('./templates/login', error="Email or name was missing")
+		
 		if not email.startswith("mailto:"):
 			email = "mailto:%s" % email
 		users.insert({"username":username, "pwd": generate_password_hash(pwd), 
@@ -80,7 +95,7 @@ def getlogout():
 	username = s.get('username',None)
 	if username:
 		s.invalidate()
-	redirect('/login')
+	redirect('/')
 
 @bottle.route('/me')
 def me():
@@ -200,9 +215,6 @@ def reset():
 	s.invalidate()
 	mongo.drop_database(db)
 
-@bottle.route('/js/<filename:re:.*\.js>')
-def send_js(filename):
-    return static_file(filename, root='./js', mimetype='text/javascript')
 
 
 # same comp could be in more than
@@ -276,6 +288,7 @@ def updateCompFwkStatus(username, fwk, endpoint, auth):
 	# if framework comp ['met'] is true: return... everything is already met
 	if fwk.get('met', False):
 		return
+	
 	# request achieved with fwk uri and related activities
 	mbox = db.users.find_one({"username":username})['email']
 	actor = urllib.quote_plus(json.dumps({'mbox':mbox}))
@@ -285,6 +298,7 @@ def updateCompFwkStatus(username, fwk, endpoint, auth):
 	achievedquery = query_string.format(actor,achievedverb, fwkentry, 'true')
 
 	get_resp = requests.get(endpoint + achievedquery , headers=headers, verify=False)
+	
 	if get_resp.status_code != 200:
 		return
 	achieved_ids = [s['object']['id'] for s in json.loads(get_resp.content)['statements']]
@@ -385,7 +399,9 @@ def getComp(compuri, user=None):
 
 	comp = parsecompetencies(compuri)
 
-	saveComp(comp)
+	if comp:
+		saveComp(comp)
+	
 	return comp
 
 def saveComp(comp, user=None):
@@ -420,7 +436,10 @@ def parsecompetencies(uri):
 	# cuz our xml is hosted with .xml right now
 	uri = tempfix(uri)
 	competencies = []
-	res = requests.get(uri).text
+	try:
+		res = requests.get(uri).text
+	except Exception, e:
+		return None
 	fmwkxml = ET.fromstring(res)
 
 	competencies = parse(fmwkxml)
