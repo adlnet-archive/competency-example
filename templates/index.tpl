@@ -23,10 +23,36 @@
 	background-position: 0 -15px;
 }
 </style>
+<script>    
+    $(document).ready(function(){
+        $("#newform").hide()
+        $("#newbutton").click(function(){
+        	$("#newform").show()
+        	$("#newbutton").hide()
+        });
+    });
+</script>
+
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Competency</a>
+	<a class="navbar-brand" href="/">Competency</a>
+	%if username:
+		<a class="navbar-brand" href="/logout">Logout</a>
+	%else:
+	<form class="navbar-form navbar-left" role="form" method="post" action="/login">
+		<div class="form-group">
+			<label class="sr-only" for="username">Username</label>
+			<input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+		</div>
+		<div class="form-group">
+			<label class="sr-only" for="password">Password</label>
+			<input type="password" class="form-control" name="password" id="password" placeholder="Password">
+		</div>
+		<button type="submit" class="btn btn-default">Sign in</button>
+	</form>	
+	%end
+	<a class="navbar-brand" href="/admin/reset" style="float:right">Admin Reset</a>
 	<form class="navbar-form navbar-right" role="form" method="post">
 		<div class="form-group">
 			<label class="sr-only" for="frameworkurl">framework url</label>
@@ -42,53 +68,65 @@
 	<div class="row">
 		<div class="col-xs-12">
 		%if username:
+			%if comps != 0:
 				<a href="/me" class="btn btn-primary btn-xs" role="button">Go to your competencies</a>
-				<br>
+			%end
 		%else:
-		<p>You are not signed in. Enter a username and password. If they are new, include an email and name, too</p>
-		%if error:
-			<div class="alert alert-danger">{{error}}</div>
+			<p>You are not signed in. Sign in above if you're an existing member. If you are new, include an email and name, too</p>
+			%if error:
+				<div class="alert alert-danger">{{error}}</div>
+			%end
+			<button type="submit" class="btn btn-default" id="newbutton">New?</button>
+			<form class="form-inline" role="form" method="post" action="/login" id="newform">
+				<div class="form-group">
+					<label class="sr-only" for="email">Email</label>
+					<input type="email" class="form-control" name="email" id="email" placeholder="Email">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="name">Full Name</label>
+					<input type="text" class="form-control" name="name" id="name" placeholder="Full Name">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="username">Username</label>
+					<input type="text" class="form-control" name="username" id="username" placeholder="Username">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="password">Password</label>
+					<input type="password" class="form-control" name="password" id="password" placeholder="Password">
+				</div>			
+				<button type="submit" class="btn btn-default">Sign in</button>
+			</form>
 		%end
-		<form class="form-inline" role="form" method="post" action="/login">
-			<div class="form-group">
-				<label class="sr-only" for="username">username</label>
-				<input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
-			</div>
-			<div class="form-group">
-				<label class="sr-only" for="password">Password</label>
-				<input type="password" class="form-control" name="password" id="password" placeholder="Password">
-			</div>
-			<p>New? Add your email and name.</p>
-			<div class="form-group">
-				<label class="sr-only" for="email">username</label>
-				<input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
-			</div>
-			<div class="form-group">
-				<label class="sr-only" for="name">username</label>
-				<input type="text" class="form-control" name="name" id="name" placeholder="Enter name">
-			</div>
-			<button type="submit" class="btn btn-default">Sign in</button>
-		</form>
-		%end
-		<p></p>
 		</div>
 	</div>
+	<br>
+	<br>
 	<div class="row">
-	%for fwk in fwks:
-	<div class="col-xs-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">{{fwk['title']}}</h3>
-			</div>
-			<div class="panel-body">
-				<p>{{fwk['description']}}</p>
-				%if username:
-				<p><a href="/me?uri={{fwk['encodedentry']}}" class="btn btn-primary" role="button">Go</a></p>
-				%end
+	%if fwks.count() == 0:
+		<div class="col-xs-12">
+			No competency frameworks? Try these out:
+			<ul>
+				<li>http://adlnet.gov/competency-framework/computer-science/basic-programming (Basic Programming)</li>
+				<li>http://adlnet.gov/competency-framework/scorm/choosing-an-lms (Choosing an LMS)</li>
+			</ul>
+		</div>
+	%else:
+		%for fwk in fwks:
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">{{fwk['title']}}</h3>
+				</div>
+				<div class="panel-body">
+					<p>{{fwk['description']}}</p>
+					%if username:
+					<p><a href="/me?uri={{fwk['encodedentry']}}" class="btn btn-primary" role="button">Go</a></p>
+					%end
+				</div>
 			</div>
 		</div>
-	</div>
-	%end
+		%end
+	%end	
 	</div>
 </div>
 </body>

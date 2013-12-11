@@ -46,16 +46,16 @@
 <p class="navbar-text navbar-right">Signed in as {{user}}</p>
 </nav>
 <div class="container">
-        <div class="starter-template" style="padding:40px 15px;text-align:center;">        
-            <div style="width:450px;height:360px;margin:0 auto;" id="compvid"></div>
-                <form role="form" method="post">
-                        <div class="form-group">
-                                <input type="hidden" name="compid" class="form-control" value={{compid}}>
-                <input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
-                        </div>
-                        <button type="submit" class="btn btn-default" id="sub">Submit</button>
-                </form>
-        </div>
+    <div class="starter-template" style="padding:40px 15px;text-align:center;">        
+        <div style="width:450px;height:360px;margin:0 auto;" id="compvid"></div>
+            <form role="form" method="post">
+                <div class="form-group">
+                    <input type="hidden" name="compid" class="form-control" value={{compid}}>
+                    <input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
+                </div>
+                <button type="submit" class="btn btn-default" id="sub">Submit</button>
+            </form>
+    </div>
 </div>
 </body>
 </html>

@@ -34,16 +34,16 @@
 				<input type="hidden" name="fwkid" class="form-control" value="{{fwk['entry']}}">
 				<div class="form-group">
 					<label class="sr-only" for="endpoint">LRS Endpoint</label>
-					<input type="text" class="form-control" name="endpoint" id="endpoint" placeholder="http://lrs.adlnet.gov/xapi/">
+					<input type="text" class="form-control" name="endpoint" id="endpoint" placeholder="http://lrs.adlnet.gov/xapi/" required>
 				</div>
 				<br>
 				<div class="form-group">
 					<label class="sr-only" for="email">Basic Auth Name</label>
-					<input type="text" class="form-control" name="name" id="name" placeholder="name">
+					<input type="text" class="form-control" name="name" id="name" placeholder="name" required>
 				</div>
 				<div class="form-group">
 					<label class="sr-only" for="name">Basic Auth Password</label>
-					<input type="password" class="form-control" name="password" id="password" placeholder="password">
+					<input type="password" class="form-control" name="password" id="password" placeholder="password" required>
 				</div>
 				<button type="submit" class="btn btn-default">Update</button>
 			</form>
