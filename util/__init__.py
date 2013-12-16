@@ -236,7 +236,7 @@ def parseCompetencies(uri):
 	uri = addXMLSuffix(uri)
 	competencies = []
 	try:
-		res = requests.get(uri).text.strip()
+		res = requests.get(uri).text
 	except Exception, e:
 		return None
 	fmwkxml = ET.fromstring(res)
@@ -257,7 +257,7 @@ def parse(xmlbit):
 		if not obj.get('competencies', False):
 			obj['competencies'] = []
 		url = addXMLSuffix(include.find('cf:Entry', namespaces=namespaces).text.strip())
-		nxt = ET.fromstring(requests.get(url).text.strip())
+		nxt = ET.fromstring(requests.get(url).text)
 		c = parse(nxt)
 		obj['competencies'].append(c)
 	return structure(xmlbit, obj)
@@ -290,7 +290,7 @@ def parsePerformanceFwk():
 	for uri in settings.PERFORMANCE_FWKS:
 		if not db.perfwk.find_one({"entry":uri}):
 			try:
-				res = requests.get(addXMLSuffix(uri)).text.strip()
+				res = requests.get(addXMLSuffix(uri)).text
 			except Exception, e:
 				return None
 			fmwkxml = ET.fromstring(res)
