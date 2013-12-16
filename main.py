@@ -195,4 +195,5 @@ def reset():
 
 if __name__ == '__main__':
 	util.parsePerformanceFwk()
+	util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
 	run(app, host='localhost', port=8888, reloader=True)
