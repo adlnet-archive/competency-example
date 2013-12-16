@@ -308,8 +308,6 @@ def parseperf(xmlbit):
 	obj['date'] = datetime.datetime.utcnow()
 	obj['references'] = getReferences(xmlbit)
 	obj['components'] = getComponents(xmlbit)
-	import pprint
-	pprint.pprint(obj)
 	return obj
 
 def addXMLSuffix(url):
