@@ -4,9 +4,14 @@ import datetime
 import json
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient
+from util import settings
 
 namespaces = {'cf': 'http://ns.medbiq.org/competencyframework/v1/',
-			  'lom': 'http://ltsc.ieee.org/xsd/LOM'}
+			  'lom': 'http://ltsc.ieee.org/xsd/LOM',
+			  'pf': "http://ns.medbiq.org/performanceframework/v1/",
+			  'cobj': "http://ns.medbiq.org/competencyobject/v1/",
+			  'dcterms': "http://purl.org/dc/terms/",
+			  'rdf': "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
 
 mongo = MongoClient()
 db = mongo.compapp
@@ -231,7 +236,7 @@ def parseCompetencies(uri):
 	uri = addXMLSuffix(uri)
 	competencies = []
 	try:
-		res = requests.get(uri).text
+		res = requests.get(uri).text.strip()
 	except Exception, e:
 		return None
 	fmwkxml = ET.fromstring(res)
@@ -251,8 +256,8 @@ def parse(xmlbit):
 	for include in xmlbit.findall('cf:Includes', namespaces=namespaces):
 		if not obj.get('competencies', False):
 			obj['competencies'] = []
-		url = addXMLSuffix(include.find('cf:Entry', namespaces=namespaces).text)
-		nxt = ET.fromstring(requests.get(url).text)
+		url = addXMLSuffix(include.find('cf:Entry', namespaces=namespaces).text.strip())
+		nxt = ET.fromstring(requests.get(url).text.strip())
 		c = parse(nxt)
 		obj['competencies'].append(c)
 	return structure(xmlbit, obj)
@@ -264,10 +269,10 @@ def structure(fmwk, root):
 	# if no relations, return comps
 	for relation in fmwk.findall('cf:Relation', namespaces=namespaces):
 		#get Reference1 object from comps, set Relationship attr to Reference2 entry
-		ref1 = relation.find('cf:Reference1/cf:Entry', namespaces=namespaces).text
-		rel = relation.find('cf:Relationship', namespaces=namespaces).text
+		ref1 = relation.find('cf:Reference1/cf:Entry', namespaces=namespaces).text.strip()
+		rel = relation.find('cf:Relationship', namespaces=namespaces).text.strip()
 		rel = rel[rel.rfind('#') + 1:]
-		ref2 = relation.find('cf:Reference2/cf:Entry', namespaces=namespaces).text
+		ref2 = relation.find('cf:Reference2/cf:Entry', namespaces=namespaces).text.strip()
 		# if i'm referencing the framework as a relation... i can't do it here
 		if ref1 == root['entry']:
 			if not root.get(rel, False):
@@ -281,19 +286,82 @@ def structure(fmwk, root):
 					comp[rel].append(ref2)
 	return root
 
+def parsePerformanceFwk():
+	for uri in settings.PERFORMANCE_FWKS:
+		if not db.perfwk.find_one({"entry":uri}):
+			try:
+				res = requests.get(addXMLSuffix(uri)).text.strip()
+			except Exception, e:
+				return None
+			fmwkxml = ET.fromstring(res)
+
+			db.perfwk.insert(parseperf(fmwkxml))
+
+def parseperf(xmlbit):
+	obj = {}
+	obj['type'] = "performanceframework"
+	obj['entry'] = getEntry(xmlbit)
+	obj['encodedentry'] = urllib.quote_plus(getEntry(xmlbit))
+	obj['catalog'] = middleStuff(xmlbit)
+	obj['title'] = getTitle(xmlbit)
+	obj['description'] = getDescription(xmlbit)
+	obj['date'] = datetime.datetime.utcnow()
+	obj['references'] = getReferences(xmlbit)
+	obj['components'] = getComponents(xmlbit)
+	import pprint
+	pprint.pprint(obj)
+	return obj
+
 def addXMLSuffix(url):
 	if url.endswith('.xml'):
 		return url
 	return url + ".xml"
 
+def getReferences(xmlbit):
+	refs = []
+	for ref in xmlbit.findall('pf:SupportingInformation/pf:Reference', namespaces=namespaces):
+		r = {}
+		r['objecturi'] = ref.find('rdf:Description', namespaces=namespaces).attrib.values()[0].strip()
+		typexml = ref.find('rdf:Type', namespaces=namespaces)
+		if typexml is not None:
+			r['type'] = typexml.attrib.values()[0].strip()
+		r['contenttype'] = ref.find('dcterms:format', namespaces=namespaces).text.strip()
+		refs.append(r)
+	return refs
+
+def getComponents(xmlbit):
+	obj = []
+	for compo in xmlbit.findall('pf:Component', namespaces=namespaces):
+		c = {}
+		c['id'] = compo.attrib.values()[0].strip()
+		c['title'] = compo.find('pf:Title', namespaces=namespaces).text.strip()
+		for comp in compo.findall('pf:Competency/pf:Reference', namespaces=namespaces):
+			if not c.get('competencies'):
+				c['competencies'] = []
+			co = {}
+			co['entry'] = comp.find('rdf:Description', namespaces=namespaces).attrib.values()[0].strip()
+			co['type'] = comp.find('rdf:Type', namespaces=namespaces).attrib.values()[0].strip()
+			c['competencies'].append(co)
+		for pl in compo.findall('pf:PerformanceLevelSet/pf:PerformanceLevel', namespaces=namespaces):
+			if not c.get('performancelevels'):
+				c['performancelevels'] = []
+			perlvl = {}
+			perlvl['displayorder'] = pl.find('pf:DisplayOrder', namespaces=namespaces).text.strip()
+			perlvl['score'] = {'singlevalue': pl.find('pf:Score/pf:SingleValue', namespaces=namespaces).text.strip()}
+			perlvl['id'] = pl.find('pf:Indicator', namespaces=namespaces).attrib.values()[0].strip()
+			perlvl['description'] = pl.find('pf:Indicator/pf:Description', namespaces=namespaces).text.strip()
+			c['performancelevels'].append(perlvl)
+		obj.append(c)
+	return obj
+
 def middleStuff(xml):
-	return xml.find('lom:lom/lom:general/lom:identifier/lom:catalog', namespaces=namespaces).text
+	return xml.find('lom:lom/lom:general/lom:identifier/lom:catalog', namespaces=namespaces).text.strip()
 
 def getEntry(xml):
-	return xml.find('lom:lom/lom:general/lom:identifier/lom:entry', namespaces=namespaces).text
+	return xml.find('lom:lom/lom:general/lom:identifier/lom:entry', namespaces=namespaces).text.strip()
 
 def getTitle(xml):
-	return xml.find('lom:lom/lom:general/lom:title/lom:string[@language="en"]', namespaces=namespaces).text
+	return xml.find('lom:lom/lom:general/lom:title/lom:string[@language="en"]', namespaces=namespaces).text.strip()
 
 def getDescription(xml):
-	return xml.find('lom:lom/lom:general/lom:description/lom:string[@language="en"]', namespaces=namespaces).text
+	return xml.find('lom:lom/lom:general/lom:description/lom:string[@language="en"]', namespaces=namespaces).text.strip()
