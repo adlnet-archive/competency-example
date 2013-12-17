@@ -26,7 +26,7 @@ def send_js(filename):
 
 @bottle.route('/static/badges/<filename>')
 def server_static(filename):
-    return static_file(filename, root='./static')
+    return static_file(filename, root='./static/badges')
 
 @bottle.route('/', method='GET')
 @bottle.route('/', method='POST')
@@ -43,8 +43,11 @@ def index():
 
 @bottle.get('/badges')
 def badges():
-	
-	return template('./templates/badges.tpl', points=pts, lines=lns, minutes=mins, levels=lvls)
+	perfwk = db.perfwk.find_one({"entry":"http://12.109.40.34/performance-framework/xapi/tetris"})
+	if not perfwk:
+		return template('./templates/badges', fwk={}, error="Tetris badges not found")
+
+	return template('./templates/badges.tpl', fwk=perfwk, error="")
 
 @bottle.get('/login')
 def getlogin():
