@@ -52,6 +52,7 @@
 		<button type="submit" class="btn btn-default">Sign in</button>
 	</form>	
 	%end
+	<a class="navbar-brand" href="/badges" style="float:left">Badges</a>
 	<a class="navbar-brand" href="/admin/reset" style="float:right">Admin Reset</a>
 	<form class="navbar-form navbar-right" role="form" method="post">
 		<div class="form-group">

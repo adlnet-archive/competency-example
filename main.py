@@ -24,6 +24,10 @@ db = mongo.compapp
 def send_js(filename):
     return static_file(filename, root='./js', mimetype='text/javascript')
 
+@bottle.route('/static/badges/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./static/badges')
+
 @bottle.route('/', method='GET')
 @bottle.route('/', method='POST')
 def index():
@@ -36,6 +40,14 @@ def index():
 	username = s.get('username', None)
 	num_user_comps = len(util.getMyComps(username))
 	return template('./templates/index', fwks=util.getAllSystemComps(), username=username, comps=num_user_comps, error=None)
+
+@bottle.get('/badges')
+def badges():
+	perfwk = db.perfwk.find_one({"entry":"http://12.109.40.34/performance-framework/xapi/tetris"})
+	if not perfwk:
+		return template('./templates/badges', fwk={}, error="Tetris badges not found")
+
+	return template('./templates/badges.tpl', fwk=perfwk, error="")
 
 @bottle.get('/login')
 def getlogin():
