@@ -33,12 +33,9 @@ def server_static(filename):
 def index():
 	s = request.environ.get('beaker.session')
 	form_fwkurl = request.forms.get('frameworkurl', None)
-	knownframeworkurls = set()
-
+	
 	if form_fwkurl:
-		knownframeworkurls.add(form_fwkurl)
-	for url in knownframeworkurls:
-		util.getComp(url)
+		util.getComp(form_fwkurl)
 
 	username = s.get('username', None)
 	num_user_comps = len(util.getMyComps(username))
@@ -204,5 +201,8 @@ def reset():
 	s.invalidate()
 	mongo.drop_database(db)
 	redirect('/')
-	
-run(app, host='localhost', port=8888, reloader=True)
+
+if __name__ == '__main__':
+	util.parsePerformanceFwk()
+	util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
+	run(app, host='localhost', port=8888, reloader=True)
