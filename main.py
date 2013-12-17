@@ -24,6 +24,10 @@ db = mongo.compapp
 def send_js(filename):
     return static_file(filename, root='./js', mimetype='text/javascript')
 
+@bottle.route('/static/badges/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./static')
+
 @bottle.route('/', method='GET')
 @bottle.route('/', method='POST')
 def index():
@@ -39,6 +43,11 @@ def index():
 	username = s.get('username', None)
 	num_user_comps = len(util.getMyComps(username))
 	return template('./templates/index', fwks=util.getAllSystemComps(), username=username, comps=num_user_comps, error=None)
+
+@bottle.get('/badges')
+def badges():
+	
+	return template('./templates/badges.tpl', points=pts, lines=lns, minutes=mins, levels=lvls)
 
 @bottle.get('/login')
 def getlogin():
