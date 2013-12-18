@@ -291,7 +291,7 @@ def structure(fmwk, root):
 	return root
 
 def parsePerformanceFwk():
-	for uri in settings.PERFORMANCE_FWKS:
+	for uri in settings.PERFORMANCE_FWKS.values():
 		if not db.perfwk.find_one({"entry":uri}):
 			try:
 				res = requests.get(addXMLSuffix(uri)).text
