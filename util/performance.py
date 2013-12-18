@@ -59,3 +59,10 @@ def evaluateTetrisStatements(stmts, perfwkuri, username):
         times.append(s['result']['extensions']['ext:time'])
 
     print "%s\n%s\n%s\n%s" % (levels, lines, scores, times)
+
+def getComponent(perfwkuri, compid):
+    perfwk = db.perfwk.find_one({"entry":perfwkuri})
+    for com in perfwk['components']:
+        if com['id'] == compid:
+            return com
+    return None
