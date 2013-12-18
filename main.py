@@ -102,12 +102,28 @@ def me():
 	if not username: 
 		redirect('/login')
 	theid = request.params.get('uri', None)
+	my_badges = False
+
 	if theid:
 		c = util.getComp(theid, user=username)
-		return template('./templates/comp', username=username, fwk=c)
+
+		if theid == "http://12.109.40.34/competency-framework/xapi/tetris":
+			my_badges = True
+		return template('./templates/comp', username=username, fwk=c, my_badges=my_badges)
 
 	mycomps = util.getMyComps(username)
 	return template('./templates/me', fwks=mycomps, username=username, error=None)
+
+@bottle.route('/mybadges')
+def my_badges():
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username: 
+		redirect('/login')
+
+	#Get user's tetris comps here
+
+	return template('./templates/mybadges', comps="") 
 
 @bottle.post('/update')
 def updatecomp():
@@ -121,7 +137,12 @@ def updatecomp():
 	
 	c = util.getComp(fwkid, user=username)
 	util.updateCompFwkStatus(username, c, endpoint+"statements", auth)
-	return template('./templates/comp', username=username, fwk=c)
+
+	my_badges = False
+	if fwkid == "http://12.109.40.34/competency-framework/xapi/tetris":
+		my_badges = True
+
+	return template('./templates/comp', username=username, fwk=c, my_badges=my_badges)
 
 @bottle.get('/test')
 def gettest():
