@@ -79,7 +79,7 @@ def updateLevels(levelsarray, fwkuri, username):
     for plvl in comp['performancelevels']:
         if plvl['id'] in existing:
             continue
-        if lvlmax > plvl['score']['singlevalue']:
+        if lvlmax >= int(plvl['score']['singlevalue']):
             ## do more, build performance object... reference in comment below
             ## then add it
             p = {}
@@ -100,7 +100,7 @@ def updateLines(linesarray, fwkuri, username):
     for plvl in comp['performancelevels']:
         if plvl['id'] in existing:
             continue
-        if lvlmax > plvl['score']['singlevalue']:
+        if lvlmax >= int(plvl['score']['singlevalue']):
             ## do more, build performance object... reference in comment below
             ## then add it
             p = {}
@@ -121,7 +121,7 @@ def updateScores(scoresarray, fwkuri, username):
     for plvl in comp['performancelevels']:
         if plvl['id'] in existing:
             continue
-        if lvlmax > plvl['score']['singlevalue']:
+        if lvlmax >= int(plvl['score']['singlevalue']):
             ## do more, build performance object... reference in comment below
             ## then add it
             p = {}
@@ -142,7 +142,7 @@ def updateTimes(timesarray, fwkuri, username):
     for plvl in comp['performancelevels']:
         if plvl['id'] in existing:
             continue
-        if lvlmax > plvl['score']['singlevalue']:
+        if lvlmax >= int(plvl['score']['singlevalue']):
             ## do more, build performance object... reference in comment below
             ## then add it
             p = {}
@@ -171,11 +171,3 @@ def saveUserTetrisCompPerformances(compuri, username, perfs):
         if c['entry'] == compuri:
             c['performances'] = perfs
     db.usercomps.update({"username":username, "entry":"http://12.109.40.34/competency-framework/xapi/tetris"}, cf)
-
-# “performances”:[ {
-#                    “entry”:performanceframework.entry,
-#                    “levelid” : performanceframework.performancelevels[n].id,
-#                    “leveldescription” : perfwk.perflvl[n].description,
-#                    “levelscore” : perfwk.perlvl[n].score
-#                    “score” : statement info.. << the value we are evaluating
-#             }...]  /// add a new performance object for each level achieved
