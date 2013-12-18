@@ -58,7 +58,10 @@ def evaluateTetrisStatements(stmts, perfwkuri, username):
         scores.append(s['result']['score']['raw'])
         times.append(s['result']['extensions']['ext:time'])
 
+    updateLevels(levels, perfwkuri, username)
     updateLines(lines, perfwkuri, username)
+    updateScores(scores, perfwkuri, username)
+    updateTimes(times, perfwkuri, username)
 
 def getComponent(perfwkuri, compid):
     perfwk = db.perfwk.find_one({"entry":perfwkuri})
@@ -67,16 +70,88 @@ def getComponent(perfwkuri, compid):
             return com
     return None
 
+def updateLevels(levelsarray, fwkuri, username):
+    comp = getComponent(fwkuri, 'comp_levels')
+    lvlmax = max(levelsarray)
+    compuri = getCompURIFromPFWK(comp)
+    perfs = getUserTetrisCompPerformances(compuri, username)
+    existing = [p['levelid'] for p in perfs]
+    for plvl in comp['performancelevels']:
+        if plvl['id'] in existing:
+            continue
+        if lvlmax > plvl['score']['singlevalue']:
+            ## do more, build performance object... reference in comment below
+            ## then add it
+            p = {}
+            p['entry'] = fwkuri
+            p['levelid'] = plvl['id']
+            p['leveldescription'] = plvl['description']
+            p['levelscore'] = plvl['score']['singlevalue']
+            p['score'] =  lvlmax
+            perfs.append(p)
+    saveUserTetrisCompPerformances(compuri, username, perfs)
+
 def updateLines(linesarray, fwkuri, username):
     comp = getComponent(fwkuri, 'comp_lines')
     lvlmax = max(linesarray)
     compuri = getCompURIFromPFWK(comp)
     perfs = getUserTetrisCompPerformances(compuri, username)
+    existing = [p['levelid'] for p in perfs]
     for plvl in comp['performancelevels']:
+        if plvl['id'] in existing:
+            continue
         if lvlmax > plvl['score']['singlevalue']:
             ## do more, build performance object... reference in comment below
             ## then add it
-            perfs.append(plvl['id'])
+            p = {}
+            p['entry'] = fwkuri
+            p['levelid'] = plvl['id']
+            p['leveldescription'] = plvl['description']
+            p['levelscore'] = plvl['score']['singlevalue']
+            p['score'] =  lvlmax
+            perfs.append(p)
+    saveUserTetrisCompPerformances(compuri, username, perfs)
+
+def updateScores(scoresarray, fwkuri, username):
+    comp = getComponent(fwkuri, 'comp_scores')
+    lvlmax = max(scoresarray)
+    compuri = getCompURIFromPFWK(comp)
+    perfs = getUserTetrisCompPerformances(compuri, username)
+    existing = [p['levelid'] for p in perfs]
+    for plvl in comp['performancelevels']:
+        if plvl['id'] in existing:
+            continue
+        if lvlmax > plvl['score']['singlevalue']:
+            ## do more, build performance object... reference in comment below
+            ## then add it
+            p = {}
+            p['entry'] = fwkuri
+            p['levelid'] = plvl['id']
+            p['leveldescription'] = plvl['description']
+            p['levelscore'] = plvl['score']['singlevalue']
+            p['score'] =  lvlmax
+            perfs.append(p)
+    saveUserTetrisCompPerformances(compuri, username, perfs)
+
+def updateTimes(timesarray, fwkuri, username):
+    comp = getComponent(fwkuri, 'comp_times')
+    lvlmax = max(timesarray)
+    compuri = getCompURIFromPFWK(comp)
+    perfs = getUserTetrisCompPerformances(compuri, username)
+    existing = [p['levelid'] for p in perfs]
+    for plvl in comp['performancelevels']:
+        if plvl['id'] in existing:
+            continue
+        if lvlmax > plvl['score']['singlevalue']:
+            ## do more, build performance object... reference in comment below
+            ## then add it
+            p = {}
+            p['entry'] = fwkuri
+            p['levelid'] = plvl['id']
+            p['leveldescription'] = plvl['description']
+            p['levelscore'] = plvl['score']['singlevalue']
+            p['score'] =  lvlmax
+            perfs.append(p)
     saveUserTetrisCompPerformances(compuri, username, perfs)
 
 def getCompURIFromPFWK(comp):
