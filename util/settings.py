@@ -21,4 +21,4 @@ DEMO_VIDEOS = {
 	"http://adlnet.gov/competency/scorm/choosing-an-lms/part5":"http://www.youtube.com/watch?v=tlBbt5niQto"
 }
 
-PERFORMANCE_FWKS = ["http://12.109.40.34/performance-framework/xapi/tetris"]
+PERFORMANCE_FWKS = {"tetris" : "http://12.109.40.34/performance-framework/xapi/tetris"}
