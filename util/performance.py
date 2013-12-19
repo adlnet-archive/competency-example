@@ -57,11 +57,18 @@ def evaluateTetrisStatements(stmts, perfwkuri, username):
         lines.append(s['result']['extensions']['ext:lines'])
         scores.append(s['result']['score']['raw'])
         times.append(s['result']['extensions']['ext:time'])
-
-    updateLevels(levels, perfwkuri, username)
-    updateLines(lines, perfwkuri, username)
-    updateScores(scores, perfwkuri, username)
-    updateTimes(times, perfwkuri, username)
+    
+    if lines:
+        updateLines(lines, perfwkuri, username)
+    
+    if levels:
+        updateLevels(levels, perfwkuri, username)
+    
+    if scores:
+        updateScores(scores, perfwkuri, username)
+    
+    if times:
+        updateTimes(times, perfwkuri, username)
 
 def getComponent(perfwkuri, compid):
     perfwk = db.perfwk.find_one({"entry":perfwkuri})

@@ -190,7 +190,7 @@ def getComp(compuri, user=None):
 			comp = getComp(compuri)
 			saveComp(comp, user)
 			return comp
-	
+
 	fixed = compuri if not compuri.endswith('.xml') else compuri[:-4]
 	comp = db.compfwk.find_one({"entry":compuri}, {"_id":0})
 	if comp:
@@ -239,7 +239,11 @@ def parseCompetencies(uri):
 		res = requests.get(uri).text
 	except Exception, e:
 		return None
-	fmwkxml = ET.fromstring(res)
+	
+	try:
+		fmwkxml = ET.fromstring(res)
+	except Exception, e:
+		return None
 
 	competencies = parse(fmwkxml)
 	return competencies

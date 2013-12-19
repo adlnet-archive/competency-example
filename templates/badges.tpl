@@ -30,7 +30,7 @@
 </nav>
 <div class="container">
 	<div class="page-header">
-		<h1>Tetris Badges <small>Can you become the Tetirs master and collect all of the badges?</small></h1>
+		<h1>Tetris Badges <small>Can you become the Tetris master and collect all of the badges?</small></h1>
 	</div>
 	%if error:
 		<div class="alert alert-danger">{{error}}</div>

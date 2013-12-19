@@ -5,6 +5,7 @@ import base64
 import requests
 import util
 from util import settings
+from util import performance
 from pymongo import MongoClient
 from beaker.middleware import SessionMiddleware
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -102,12 +103,64 @@ def me():
 	if not username: 
 		redirect('/login')
 	theid = request.params.get('uri', None)
+	my_badges = False
+
 	if theid:
 		c = util.getComp(theid, user=username)
-		return template('./templates/comp', username=username, fwk=c)
+
+		if theid == "http://12.109.40.34/competency-framework/xapi/tetris":
+			my_badges = True
+		return template('./templates/comp', username=username, fwk=c, my_badges=my_badges)
 
 	mycomps = util.getMyComps(username)
 	return template('./templates/me', fwks=mycomps, username=username, error=None)
+
+@bottle.route('/mybadges')
+def my_badges():
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username: 
+		redirect('/login')
+
+	perfwk = db.perfwk.find_one({"entry":"http://12.109.40.34/performance-framework/xapi/tetris"})
+	levels = lines = scores = times = total = 0
+	for component in perfwk["components"]:
+		if component["id"] == "comp_levels":
+			for pl in component["performancelevels"]:
+				levels += 1
+		elif component["id"] == "comp_lines":
+			for pl in component["performancelevels"]:
+				lines += 1
+		elif component["id"] == "comp_scores":
+			for pl in component["performancelevels"]:
+				scores += 1
+		else:
+			for pl in component["performancelevels"]:
+				times += 1
+	total = levels + lines + scores + times
+
+
+	performance.updatePerformance(settings.PERFORMANCE_FWKS["tetris"], username)
+	comps = util.getComp("http://12.109.40.34/competency-framework/xapi/tetris", username)
+	
+	my_levels = my_lines = my_scores = my_times = my_total = 0
+	for competency in comps["competencies"]:
+		if competency["title"] == "Experience API Tetris Level Competency":
+			for perf in competency["performances"]:
+				my_levels += 1
+		elif competency["title"] == "Experience API Tetris Line Competency":
+			for perf in competency["performances"]:
+				my_lines += 1
+		elif competency["title"] == "Experience API Tetris Score Competency":
+			for perf in competency["performances"]:
+				my_scores += 1
+		else:
+			for perf in competency["performances"]:
+				my_times += 1
+	my_total = my_levels + my_lines + my_scores + my_times
+
+	return template('./templates/mybadges', comps=comps, total=total, my_total=my_total, levels=levels, lines=lines, scores=scores, times=times, my_levels=my_levels, my_lines=my_lines,
+		my_scores=my_scores, my_times=my_times)
 
 @bottle.post('/update')
 def updatecomp():
@@ -121,7 +174,12 @@ def updatecomp():
 	
 	c = util.getComp(fwkid, user=username)
 	util.updateCompFwkStatus(username, c, endpoint+"statements", auth)
-	return template('./templates/comp', username=username, fwk=c)
+
+	my_badges = False
+	if fwkid == "http://12.109.40.34/competency-framework/xapi/tetris":
+		my_badges = True
+
+	return template('./templates/comp', username=username, fwk=c, my_badges=my_badges)
 
 @bottle.get('/test')
 def gettest():

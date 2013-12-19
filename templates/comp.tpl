@@ -52,6 +52,11 @@
 	</div>
 </div>
 <div class="container">
+	%if my_badges:
+		<a href="/mybadges" class="btn btn-primary" role="button">My Tetris Badges</a>
+		<br>
+		<br>
+	%end
 	%for comp in fwk['competencies']:
 		%if comp['type'] == 'framework': 
 			<div class="row">
