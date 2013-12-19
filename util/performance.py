@@ -21,38 +21,6 @@ def updatePerformance(perfwkuri, username):
     else:
         print "unknown performance uri: %s" % perfwkuri
 
-def updateLevels(levelsarray,fwkuri, username):
-    comp = getComponent(fwkuri, 'comp_levels')
-    lvlmax = max(levelsarray)
-    met = []
-    for plvl in comp["performancelevels"]:
-        if lvlmax > plvl["score"]["singlevalue"]:
-            met.append(plvl["id"])
-
-def updateLines(linesarray, fwkuri, username):
-    comp = getComponent(fwkuri, 'comp_lines')
-    lvlmax = max(linesarray)
-    met = []
-    for plvl in comp['performancelevels']:
-        if lvlmax > plvl['score']['singlevalue']:
-            met.append(plvl['id'])
-
-def updateTimes(timesarray, fwkuri, username):
-    comp = getComponent(fwkuri, 'comp_times')
-    lvlmax = max(linesarray)
-    met = []
-    for plvl in comp['performancelevels']:
-        if lvlmax > plvl['score']['singlevalue']:
-            met.append(plvl['id'])
-
-def updateScores(scorearray, fwkuri, username):
-    comp = getComponent(fwkuri, 'comp_scores')
-    lvlmax = max(linesarray)
-    met = []
-    for plvl in comp['performancelevels']:
-        if lvlmax > plvl['score']['singlevalue']:
-            met.append(plvl['id'])
-
 def getObjId(perfwkuri):
     pf = db.perfwk.find_one({"entry":perfwkuri})
     for ref in pf['references']:
@@ -90,15 +58,17 @@ def evaluateTetrisStatements(stmts, perfwkuri, username):
         scores.append(s['result']['score']['raw'])
         times.append(s['result']['extensions']['ext:time'])
     
-    updateLines(lines, perfwkuri, username)
-    updateLevels(levels, perfwkuri, username)
-    updateScores(scores, perfwkuri, username)
-    updateTimes(times, perfwkuri, username)
-
-    updateLevels(levels, perfwkuri, username)
-    updateLines(lines, perfwkuri, username)
-    updateScores(scores, perfwkuri, username)
-    updateTimes(times, perfwkuri, username)
+    if lines:
+        updateLines(lines, perfwkuri, username)
+    
+    if levels:
+        updateLevels(levels, perfwkuri, username)
+    
+    if scores:
+        updateScores(scores, perfwkuri, username)
+    
+    if times:
+        updateTimes(times, perfwkuri, username)
 
 def getComponent(perfwkuri, compid):
     perfwk = db.perfwk.find_one({"entry":perfwkuri})

@@ -15,12 +15,51 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+	<a class="navbar-brand" href="/me" style=>Me</a>
 </nav>
 <div class="jumbotron">
 	<div class="container">
+		<h1>Tetris</h1>
 	</div>
 </div>
 <div class="container">
+	<div class="page-header">
+		%if my_total < total:
+			<h1>Tetris Badges <small>Can you become the Tetris master and collect all of the badges? <b>{{my_total}}/{{total}}</b></small></h1>
+		%else:
+			<h1>Tetris Badges <small>You are the Tetris master! <b>{{my_total}}/{{total}}</b></small></h1>
+		%end
+	</div>
+	%for competency in comps["competencies"]:
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					%ctit = competency["title"]
+					%if ctit == "Experience API Tetris Level Competency":
+						%tot = levels
+						%mytot = my_levels
+					%elif ctit == "Experience API Tetris Line Competency":
+						%tot = lines
+						%mytot = my_lines
+					%elif ctit == "Experience API Tetris Score Competency":
+						%tot = scores
+						%mytot = my_scores
+					%else:
+						%tot = times
+						%mytot = my_times
+					%end
+					<h3 class="panel-title">{{ctit}} - {{mytot}}/{{tot}}</h3>
+				</div>
+				<div class="panel-body">			
+					%for perf in competency["performances"]:
+						%png = perf["levelid"] + ".png"
+						%tit = perf["levelid"].replace("_", " ")
+						<p><img src="../static/badges/{{png}}"><b>{{tit}}</b> - {{perf["leveldescription"]}}</p>
+					%end
+				</div>
+			</div>
+		</div>
+	%end
 </div>
 </body>
 </html>
