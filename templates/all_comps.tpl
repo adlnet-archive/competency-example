@@ -39,6 +39,13 @@
 	%if username:
 		<a class="navbar-brand" href="/logout">Logout</a>
 	%end
+    <form class="navbar-form navbar-right" role="form" method="post">
+        <div class="form-group">
+            <label class="sr-only" for="frameworkurl">framework url</label>
+            <input type="text" class="form-control" name="frameworkurl" id="frameworkurl" placeholder="Framework URL">
+        </div>
+        <button type="submit" class="btn btn-alt navbar-button">Add framework</button>
+    </form>
 </nav>
 <div class="container">
 	<div class="page-header">

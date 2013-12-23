@@ -36,12 +36,21 @@ def index():
 
 	return template('./templates/index', username=username, error=None)
 
-@bottle.get('/all_comps')
+@bottle.route('/all_comps', method='POST')
+@bottle.get('/all_comps', method='GET')
 def all_comps():
 	s = request.environ.get('beaker.session')
 	username = s.get('username',None)
 	if not username:
 		redirect('/')
+
+	form_fwkurl = request.forms.get('frameworkurl', None)
+	knownframeworkurls = set()
+
+	if form_fwkurl:
+		knownframeworkurls.add(form_fwkurl)
+	for url in knownframeworkurls:
+		util.getComp(url)
 
 	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)
 
@@ -51,7 +60,7 @@ def add_framework(fwk):
 	username = s.get('username',None)
 	if not username:
 		redirect('/')
-
+     	
 	to_add = fwk
 	if to_add == "tetris":
 		util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
