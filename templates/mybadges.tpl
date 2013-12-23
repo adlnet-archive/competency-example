@@ -50,11 +50,13 @@
 					%end
 					<h3 class="panel-title">{{ctit}} - {{mytot}}/{{tot}}</h3>
 				</div>
-				<div class="panel-body">			
-					%for perf in competency["performances"]:
-						%png = perf["levelid"] + ".png"
-						%tit = perf["levelid"].replace("_", " ")
-						<p><img src="../static/badges/{{png}}"><b>{{tit}}</b> - {{perf["leveldescription"]}}</p>
+				<div class="panel-body">
+					%if 'performances' in competency:			
+						%for perf in competency["performances"]:
+							%png = perf["levelid"] + ".png"
+							%tit = perf["levelid"].replace("_", " ")
+							<p><img src="../static/badges/{{png}}"><b>{{tit}}</b> - {{perf["leveldescription"]}}</p>
+						%end
 					%end
 				</div>
 			</div>
