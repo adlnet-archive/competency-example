@@ -30,17 +30,37 @@ def server_static(filename):
     return static_file(filename, root='./static/badges')
 
 @bottle.route('/', method='GET')
-@bottle.route('/', method='POST')
 def index():
 	s = request.environ.get('beaker.session')
-	form_fwkurl = request.forms.get('frameworkurl', None)
-	
-	if form_fwkurl:
-		util.getComp(form_fwkurl)
-
 	username = s.get('username', None)
-	num_user_comps = len(util.getMyComps(username))
-	return template('./templates/index', fwks=util.getAllSystemComps(), username=username, comps=num_user_comps, error=None)
+
+	return template('./templates/index', username=username, error=None)
+
+@bottle.get('/all_comps')
+def all_comps():
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username:
+		redirect('/')
+
+	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)
+
+@bottle.get('/add-framework/<fwk>')
+def add_framework(fwk):
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username:
+		redirect('/')
+
+	to_add = fwk
+	if to_add == "tetris":
+		util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
+	elif to_add == "choosinganlms":
+		util.getComp("http://adlnet.gov/competency-framework/scorm/choosing-an-lms")
+	elif to_add == "basicprogramming":
+		util.getComp("http://adlnet.gov/competency-framework/computer-science/basic-programming")
+
+	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)	
 
 @bottle.get('/badges')
 def badges():
@@ -263,7 +283,10 @@ def reset():
 	mongo.drop_database(db)
 	redirect('/')
 
+@bottle.get('/admin')
+def reset():
+	return template('./templates/admin.tpl')
+
+
 if __name__ == '__main__':
-	util.parsePerformanceFwk()
-	util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
 	run(app, host='localhost', port=8888, reloader=True)
