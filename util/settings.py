@@ -22,3 +22,6 @@ DEMO_VIDEOS = {
 }
 
 PERFORMANCE_FWKS = {"tetris" : "http://12.109.40.34/performance-framework/xapi/tetris"}
+
+STARTERS = [{"Basic Programming":"http://adlnet.gov/competency-framework/computer-science/basic-programming"},
+{"Choosing an LMS":"http://adlnet.gov/competency-framework/scorm/choosing-an-lms"}, {"Tetris":"http://12.109.40.34/competency-framework/xapi/tetris"}]

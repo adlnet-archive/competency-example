@@ -30,17 +30,46 @@ def server_static(filename):
     return static_file(filename, root='./static/badges')
 
 @bottle.route('/', method='GET')
-@bottle.route('/', method='POST')
 def index():
 	s = request.environ.get('beaker.session')
-	form_fwkurl = request.forms.get('frameworkurl', None)
-	
-	if form_fwkurl:
-		util.getComp(form_fwkurl)
-
 	username = s.get('username', None)
-	num_user_comps = len(util.getMyComps(username))
-	return template('./templates/index', fwks=util.getAllSystemComps(), username=username, comps=num_user_comps, error=None)
+
+	return template('./templates/index', username=username, error=None)
+
+@bottle.route('/all_comps', method='POST')
+@bottle.get('/all_comps', method='GET')
+def all_comps():
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username:
+		redirect('/')
+
+	form_fwkurl = request.forms.get('frameworkurl', None)
+	knownframeworkurls = set()
+
+	if form_fwkurl:
+		knownframeworkurls.add(form_fwkurl)
+	for url in knownframeworkurls:
+		util.getComp(url)
+
+	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)
+
+@bottle.get('/add-framework/<fwk>')
+def add_framework(fwk):
+	s = request.environ.get('beaker.session')
+	username = s.get('username',None)
+	if not username:
+		redirect('/')
+     	
+	to_add = fwk
+	if to_add == "tetris":
+		util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
+	elif to_add == "choosinganlms":
+		util.getComp("http://adlnet.gov/competency-framework/scorm/choosing-an-lms")
+	elif to_add == "basicprogramming":
+		util.getComp("http://adlnet.gov/competency-framework/computer-science/basic-programming")
+
+	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)	
 
 @bottle.get('/badges')
 def badges():
@@ -146,17 +175,21 @@ def my_badges():
 	my_levels = my_lines = my_scores = my_times = my_total = 0
 	for competency in comps["competencies"]:
 		if competency["title"] == "Experience API Tetris Level Competency":
-			for perf in competency["performances"]:
-				my_levels += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_levels += 1
 		elif competency["title"] == "Experience API Tetris Line Competency":
-			for perf in competency["performances"]:
-				my_lines += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_lines += 1
 		elif competency["title"] == "Experience API Tetris Score Competency":
-			for perf in competency["performances"]:
-				my_scores += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_scores += 1
 		else:
-			for perf in competency["performances"]:
-				my_times += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_times += 1
 	my_total = my_levels + my_lines + my_scores + my_times
 
 	return template('./templates/mybadges', comps=comps, total=total, my_total=my_total, levels=levels, lines=lines, scores=scores, times=times, my_levels=my_levels, my_lines=my_lines,
@@ -261,9 +294,14 @@ def reset():
 	s = request.environ.get('beaker.session')
 	s.invalidate()
 	mongo.drop_database(db)
+	util.parsePerformanceFwk()	
 	redirect('/')
+
+@bottle.get('/admin')
+def reset():
+	return template('./templates/admin.tpl')
+
 
 if __name__ == '__main__':
 	util.parsePerformanceFwk()
-	util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
 	run(app, host='localhost', port=8888, reloader=True)
