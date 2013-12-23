@@ -175,17 +175,21 @@ def my_badges():
 	my_levels = my_lines = my_scores = my_times = my_total = 0
 	for competency in comps["competencies"]:
 		if competency["title"] == "Experience API Tetris Level Competency":
-			for perf in competency["performances"]:
-				my_levels += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_levels += 1
 		elif competency["title"] == "Experience API Tetris Line Competency":
-			for perf in competency["performances"]:
-				my_lines += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_lines += 1
 		elif competency["title"] == "Experience API Tetris Score Competency":
-			for perf in competency["performances"]:
-				my_scores += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_scores += 1
 		else:
-			for perf in competency["performances"]:
-				my_times += 1
+			if 'performances' in competency:
+				for perf in competency["performances"]:
+					my_times += 1
 	my_total = my_levels + my_lines + my_scores + my_times
 
 	return template('./templates/mybadges', comps=comps, total=total, my_total=my_total, levels=levels, lines=lines, scores=scores, times=times, my_levels=my_levels, my_lines=my_lines,
