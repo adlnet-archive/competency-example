@@ -290,6 +290,7 @@ def reset():
 	s = request.environ.get('beaker.session')
 	s.invalidate()
 	mongo.drop_database(db)
+	util.parsePerformanceFwk()	
 	redirect('/')
 
 @bottle.get('/admin')
