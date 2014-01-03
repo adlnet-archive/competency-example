@@ -261,7 +261,16 @@ def parse(xmlbit):
 		if not obj.get('competencies', False):
 			obj['competencies'] = []
 		url = addXMLSuffix(include.find('cf:Entry', namespaces=namespaces).text.strip())
-		nxt = ET.fromstring(requests.get(url).text)
+		# HACK FOR ADL NETWORK
+		try:
+			nxt = ET.fromstring(requests.get(url).text)
+		except Exception, e:
+			if not 'www.' in url:
+				url = "http://www." + url[7:]
+				nxt = ET.fromstring(requests.get(url).text)
+			else:
+				raise e				
+			
 		c = parse(nxt)
 		obj['competencies'].append(c)
 	return structure(xmlbit, obj)

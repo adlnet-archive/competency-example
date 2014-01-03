@@ -60,14 +60,14 @@ def add_framework(fwk):
 	username = s.get('username',None)
 	if not username:
 		redirect('/')
-     	
+
 	to_add = fwk
 	if to_add == "tetris":
 		util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
 	elif to_add == "choosinganlms":
-		util.getComp("http://adlnet.gov/competency-framework/scorm/choosing-an-lms")
+		util.getComp("http://www.adlnet.gov/competency-framework/scorm/choosing-an-lms")
 	elif to_add == "basicprogramming":
-		util.getComp("http://adlnet.gov/competency-framework/computer-science/basic-programming")
+		util.getComp("http://www.adlnet.gov/competency-framework/computer-science/basic-programming")
 
 	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)	
 
