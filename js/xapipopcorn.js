@@ -106,7 +106,7 @@
         function startstuff(launched){
             var stmt = {"actor":actor, "object": videoActivity}
             if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}}
             }
 
             if (launched){
@@ -134,7 +134,7 @@
             var context = {"contextActivities":{"parent":[{"id": objectURI}]}};
             
             if (competency){
-                context["contextActivities"]["other"] = [{"id": "compID:" + competency}]
+                context["contextActivities"]["other"] = [{"id": competency}]
             }
             stmt["context"] = context
             result["extensions"][extKey] = bench
@@ -149,7 +149,7 @@
                     "result":{"extensions":{"resultExt:paused":paused}}}
 
             if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}}
             }
             report(stmt);
         }
@@ -162,7 +162,7 @@
                     "result":{"extensions":{"resultExt:seeked": seeked}}}
             
             if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}}
             }             
             report(stmt);
         }
@@ -175,7 +175,7 @@
                     "result":{"duration":duration, "completion": true}}
 
             if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}}
             }
             report(stmt);
             // Reset video quartile states
