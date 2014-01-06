@@ -31,11 +31,13 @@
 		%end
 		</div>
 	</div>
-	<div class="row">
 		%if not fwks:
+		<div class="row">
 			<div class="col-xs-12">You have no competencies yet!</div>
+		</div>
 		%else:
 			%for fwk in fwks:
+			<div class="row">
 				<div class="col-xs-12">
 					%if fwk.get('met', False):
 						<div class="panel panel-success">
@@ -52,10 +54,9 @@
 							%end
 						</div>
 						</div>
-						</div>
 				</div>
+			</div>
 			%end
 		%end
-	</div>
 </body>
 </html>
