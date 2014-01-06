@@ -39,20 +39,29 @@
 				<div class="col-xs-12">
 					%if fwk.get('met', False):
 						<div class="panel panel-success">
+							<div class="panel-heading">
+								<h3 class="panel-title">{{fwk['title']}}</h3>
+							</div>
+							<div class="panel-body">
+								<p>{{fwk['description']}}</p>
+								%if username:
+									<p><a href="/me?uri={{fwk['encodedentry']}}" class="btn btn-primary btn-sm" role="button">Details</a></p>
+								%end
+							</div>
+						</div>
 					%else:
 						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">{{fwk['title']}}</h3>
+							</div>
+							<div class="panel-body">
+								<p>{{fwk['description']}}</p>
+								%if username:
+									<p><a href="/me?uri={{fwk['encodedentry']}}" class="btn btn-primary btn-sm" role="button">Details</a></p>
+								%end
+							</div>						
+						</div>
 					%end
-						<div class="panel-heading">
-							<h3 class="panel-title">{{fwk['title']}}</h3>
-						</div>
-						<div class="panel-body">
-							<p>{{fwk['description']}}</p>
-							%if username:
-								<p><a href="/me?uri={{fwk['encodedentry']}}" class="btn btn-primary btn-sm" role="button">Details</a></p>
-							%end
-						</div>
-						</div>
-						</div>
 				</div>
 			%end
 		%end

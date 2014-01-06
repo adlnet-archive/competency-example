@@ -32,7 +32,7 @@ if ( !Date.prototype.toISOString ) {
     var Config = function()
     {
         var conf = {};
-        conf['endpoint'] = "http://localhost:8000/xapi/";
+        conf['endpoint'] = "https://lrs.adlnet.gov/xapi/";
         try
         {
             conf['auth'] = "Basic " + Base64.encode('tom:1234'); 

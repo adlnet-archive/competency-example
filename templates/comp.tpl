@@ -27,9 +27,6 @@
 			</div>
 		%else:
 			%if username:
-			<!-- work in progress
-			<p><a href="/me?update={{fwk['encodedentry']}}" class="btn btn-primary" role="button">Check for Updates</a></p>
-			-->
 			<form class="form-inline" role="form" method="post" action="/update">
 				<input type="hidden" name="fwkid" class="form-control" value="{{fwk['entry']}}">
 				<div class="form-group">
@@ -56,7 +53,9 @@
 		<a href="/mybadges" class="btn btn-primary" role="button">My Tetris Badges</a>
 		<br>
 		<br>
-	%end
+		<!--Replace href with url of tetris game-->
+		<a href="https://lrs.adlnet.gov/prototypes/" class="btn btn-primary" role="button">Play Tetris!</a>		
+	%else:
 	%for comp in fwk['competencies']:
 		%if comp['type'] == 'framework': 
 			<div class="row">
@@ -112,6 +111,7 @@
 				</div>
 			</div>
 		%end
+	%end
 	%end
 </div>
 </body>
