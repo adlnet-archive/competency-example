@@ -15,7 +15,6 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-	<a class="navbar-brand" href="/me" style=>Me</a>
 </nav>
 <div class="jumbotron">
 	<div class="container">

@@ -15,7 +15,8 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Competency</a>
+<a class="navbar-brand" href="/">Main</a>
+<a class="navbar-brand" href="/all_comps">All Competencies</a>
 </nav>
 <div class="container">
 	<div class="row">
@@ -41,6 +42,16 @@
 				<div class="col-xs-12">
 					%if fwk.get('met', False):
 						<div class="panel panel-success">
+							<div class="panel-heading">
+								<h3 class="panel-title">{{fwk['title']}}</h3>
+							</div>
+							<div class="panel-body">
+								<p>{{fwk['description']}}</p>
+								%if username:
+									<p><a href="/me?uri={{fwk['encodedentry']}}" class="btn btn-primary btn-sm" role="button">Details</a></p>
+								%end
+							</div>
+						</div>
 					%else:
 						<div class="panel panel-default">
 					%end
