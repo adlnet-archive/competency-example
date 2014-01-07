@@ -52,7 +52,6 @@
 		<button type="submit" class="btn btn-default">Sign in</button>
 	</form>	
 	%end
-	<a class="navbar-brand" href="/badges" style="float:left">Badges</a>
 </nav>
 <div class="container">
 	<div class="page-header">

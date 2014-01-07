@@ -15,7 +15,8 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Competency</a>
+<a class="navbar-brand" href="/">Main</a>
+<a href="/me" class="navbar-brand">My Competencies</a>
 </nav>
 <div class="jumbotron">
 	<div class="container">
@@ -27,9 +28,6 @@
 			</div>
 		%else:
 			%if username:
-			<!-- work in progress
-			<p><a href="/me?update={{fwk['encodedentry']}}" class="btn btn-primary" role="button">Check for Updates</a></p>
-			-->
 			<form class="form-inline" role="form" method="post" action="/update">
 				<input type="hidden" name="fwkid" class="form-control" value="{{fwk['entry']}}">
 				<div class="form-group">
@@ -56,7 +54,12 @@
 		<a href="/mybadges" class="btn btn-primary" role="button">My Tetris Badges</a>
 		<br>
 		<br>
-	%end
+		<!--Replace href with url of tetris game-->
+		<a href="https://lrs.adlnet.gov/prototypes/" class="btn btn-primary" role="button">Play Tetris!</a>	
+		<br>
+		<br>
+		<a class="btn btn-primary" href="/badges" role="button">All Badges</a>
+	%else:
 	%for comp in fwk['competencies']:
 		%if comp['type'] == 'framework': 
 			<div class="row">
@@ -112,6 +115,7 @@
 				</div>
 			</div>
 		%end
+	%end
 	%end
 </div>
 </body>
