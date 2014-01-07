@@ -1,6 +1,6 @@
 import base64
 
-LRS_STATEMENT_ENDPOINT = 'https://lrs.adlnet.gov/xapi/'
+LRS_STATEMENT_ENDPOINT = 'https://lrs.adlnet.gov/xapi/statements'
 
 ENDPOINT_AUTH_USERNAME = 'tom'
 
