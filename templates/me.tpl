@@ -15,7 +15,8 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Competency</a>
+<a class="navbar-brand" href="/">Main</a>
+<a class="navbar-brand" href="/all_comps">All Competencies</a>
 </nav>
 <div class="container">
 	<div class="row">

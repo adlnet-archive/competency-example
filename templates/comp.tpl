@@ -15,7 +15,8 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Competency</a>
+<a class="navbar-brand" href="/">Main</a>
+<a href="/me" class="navbar-brand">My Competencies</a>
 </nav>
 <div class="jumbotron">
 	<div class="container">
@@ -54,7 +55,10 @@
 		<br>
 		<br>
 		<!--Replace href with url of tetris game-->
-		<a href="https://lrs.adlnet.gov/prototypes/" class="btn btn-primary" role="button">Play Tetris!</a>		
+		<a href="https://lrs.adlnet.gov/prototypes/" class="btn btn-primary" role="button">Play Tetris!</a>	
+		<br>
+		<br>
+		<a class="btn btn-primary" href="/badges" role="button">All Badges</a>
 	%else:
 	%for comp in fwk['competencies']:
 		%if comp['type'] == 'framework': 

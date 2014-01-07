@@ -26,7 +26,6 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-	<a class="navbar-brand" href="/" style=>Home</a>
 </nav>
 <div class="container">
 	<div class="page-header">
