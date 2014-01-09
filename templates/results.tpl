@@ -28,15 +28,15 @@
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 </nav>
 <div class="container">
-	<p>After you took the quiz, behind the scenes this app calculated your results and set the achieved field for that competetency in your competetency framework. Ideally, these 
+	<p>After you took the quiz, behind the scenes this app calculated your results and set the passed field for that competetency in your competetency framework. Ideally, these 
 	quizzes would be hosted independently and the app would read from their performance frameworks to see what warrants a passing grade (kind of like how the Tetris example awards badges). 
 	For now this is just another quick way to show the use of the LRS in these situations.</p>
 	<br>
 	<br>
 	%if passed:
-	<p>Your progress has been recorded. You achieved the competency {{theid}} <a href='/me'>Back to list</a></p>
+	<p>Your progress has been recorded. You passed the competency {{theid}} <a href='/me'>Back to list</a></p>
 	%else:
-	<p>Your progress has been recorded. You did not achieve the competency {{theid}} <a href='/me'>Back to list</a></p>
+	<p>Your progress has been recorded. You did not pass the competency {{theid}} <a href='/me'>Back to list</a></p>
 </div>
 </body>
 </html>
