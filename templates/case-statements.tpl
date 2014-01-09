@@ -15,7 +15,7 @@
     <script type="text/javascript">
         var data = [
 		    {
-		        "question": "this is true", 
+		        "question": "A switch-case statement is a useful programming language that lets you control the flow of the program based on the value of a variable or expression.", 
 		        "type": "true/false", 
 		        "correct": true, 
 		        "answers": [
@@ -24,7 +24,7 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "If the variable or expression that you’re testing has a number of different of possible values, you could not execute a block of code for each separate value.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -33,75 +33,75 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "Python doesn't come with a typical switch-case statement.", 
 		        "type": "true/false", 
-		        "correct": false, 
+		        "correct": true, 
 		        "answers": [
 		            true, 
 		            false
 		        ]
 		    }, 
 		    {
-		        "question": "type in ok cool", 
+		        "question": "What is an easy substitute for switch-case statements in Python?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "ok", 
-		            "cool"
+		            "if-else", 
+		            "blocks",
+		            "dictionaries"
 		        ]
 		    }, 
 		    {
-		        "question": "type in HOLLA BACK", 
+		        "question": "What is another name for case-statements?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "HOLLA", 
-		            "BACK"
+		            "switch", 
+		            "statements"
 		        ]
 		    }, 
 		    {
-		        "question": "type in 3", 
+		        "question": "What keyword is generally needed after the code block in a particular case is ran so it doesn't run the rest of the cases?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "3"
+		            "break"
 		        ]
 		    }, 
 		    {
-		        "question": "type in yall", 
+		        "question": "In Python, if using a dictionary as a case-statement what part of the dictionary trigger the 'case blocks'?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "yall"
+		            "keys"
 		        ]
 		    }, 
 		    {
-		        "question": "third one", 
+		        "question": "switch(n) {case 0: printf('Hello');break; case 1: printf('Salut'); case 2: printf('Hola');break;} In C, if n=1, what does it print?", 
 		        "type": "choice", 
-		        "correct": "3", 
+		        "correct": "Queue", 
 		        "answers": [
-		            "1", 
-		            "2", 
-		            "3", 
-		            "4"
+		            "Hello", 
+		            "Salut", 
+		            "Hola", 
+		            "Salut Hola"		        ]
+		    }, 
+		    {
+		        "question": "if n==0: print 'Hello' elif n==1: print 'Salut' else: print 'Hola' In Python, if n=1, what does it print?", 
+		        "type": "choice", 
+		        "correct": "Salut", 
+		        "answers": [
+		            "Hello", 
+		            "Salut", 
+		            "Hola",
+		            "Salut Hola"
 		        ]
 		    }, 
 		    {
-		        "question": "last one", 
+		        "question": "options = {0:'Hello', 1:'Salut', 2:'Hola'} In Python, what does options[0] print?", 
 		        "type": "choice", 
-		        "correct": "four", 
+		        "correct": "Hello", 
 		        "answers": [
-		            "one", 
-		            "two", 
-		            "three", 
-		            "four"
-		        ]
-		    }, 
-		    {
-		        "question": "try with spaces second one", 
-		        "type": "choice", 
-		        "correct": "second", 
-		        "answers": [
-		            "first ", 
-		            " second", 
-		            "third ", 
-		            " last"
+		            "Hello", 
+		            "Salut", 
+		            "Hola", 
+		            "Salut Hola"
 		        ]
 		    }
 		]
@@ -155,11 +155,11 @@
 	<form class="navbar-form navbar-left" role="search" method="post">
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>-->
-            <form action="#" method="post" id="quiz" role="form">
+            <form action="/test" method="post" id="quiz" role="form">
 				<div class="form-group">
 					<input type="hidden" name="compid" class="form-control" value={{compid}}>
 					<input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
-					<input type="hidden" name="testname" class="form-control" value='thetest'>
+					<input type="hidden" name="testname" class="form-control" value="case-statements">
 				</div>
                 <div class="form-group" id="fg1">
                 </div>
