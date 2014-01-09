@@ -15,6 +15,8 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+<a class="navbar-brand" href="/">Main</a>
+<a href="/me" class="navbar-brand">My Competencies</a>
 </nav>
 <div class="jumbotron">
 	<div class="container">
