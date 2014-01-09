@@ -191,10 +191,16 @@ def getComp(compuri, user=None):
 			saveComp(comp, user)
 			return comp
 
+	##### hacks for weird url vs uri issues 
 	fixed = compuri if not compuri.endswith('.xml') else compuri[:-4]
-	comp = db.compfwk.find_one({"entry":compuri}, {"_id":0})
+	comp = db.compfwk.find_one({"entry":fixed}, {"_id":0})
 	if comp:
 		return comp
+	elif fixed.find('www.') > -1:
+		fixed = ''.join(fixed.split('www.'))
+		comp = db.compfwk.find_one({"entry":fixed}, {"_id":0})
+		if comp:
+			return comp
 
 	comp = parseCompetencies(compuri)
 
@@ -223,6 +229,7 @@ def getContentURLsFromLR(compuri):
 	compuri = compuri[:7] + 'www.' + compuri[7:]
 	#####!!!!!!!! end hack
 	url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
+	# url = "https://node02.public.learningregistry.net/slice?any_tags=%s" % compuri
 	resp = requests.get(url)
 	if resp.status_code != 200:
 		return None
