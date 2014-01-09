@@ -2,6 +2,7 @@ import bottle
 from bottle import run, request, response, redirect, template
 import json
 import base64
+import urllib
 import requests
 import util
 from util import settings
@@ -220,8 +221,10 @@ def gettest():
 	username = s.get('username',None)
 	if not username:
 		redirect('/login')
+
 	fwkid = request.params.get('fwkid', None)
 	theid = request.params.get('compid', None)
+	print theid
 	if not theid and not fwkid:
 		redirect('/')
 	
@@ -233,12 +236,27 @@ def gettest():
 		urls = util.getContentURLsFromLR(theid)
 		if urls:
 			return template('./templates/videolist.tpl', user=username, compid=theid, actor=json.dumps(actor), urls=urls)
+	
+	if theid == 'http://adlnet.gov/competency/computer-science/understanding-variables':
+		return template('./templates/understanding-variables.tpl', compid=theid, fwkid=fwkid, user=username)
+	elif theid == 'http://adlnet.gov/competency/computer-science/case-statements':
+		return template('./templates/case-statements.tpl', compid=theid, fwkid=fwkid, user=username)
+	elif theid == 'http://adlnet.gov/competency/computer-science/if-else':
+		return template('./templates/if-else.tpl', compid=theid, fwkid=fwkid, user=username)
+	elif theid == 'http://adlnet.gov/competency/computer-science/for-loop':
+		return template('./templates/for-loop.tpl', compid=theid, fwkid=fwkid, user=username)
+	elif theid == 'http://adlnet.gov/competency/computer-science/while-loop':
+		return template('./templates/while-loop.tpl', compid=theid, fwkid=fwkid, user=username)
+	elif theid == 'http://adlnet.gov/competency/computer-science/understanding-functions':
+		return template('./templates/understanding-functions.tpl', compid=theid, fwkid=fwkid, user=username)
+
 	return template('./templates/test.tpl', compid=theid, fwkid=fwkid, user=username)
 
 @bottle.post('/test')
 def posttest():
 	fwkid = request.forms.get('fwkid')
 	theid = request.forms.get('compid')
+	testname = request.params.get('testname')
 	s = request.environ.get('beaker.session')
 	username = s.get('username',None)
 	if not username:
@@ -248,46 +266,39 @@ def posttest():
 	if not user:
 		redirect('/login')
 
+
 	actor = {'mbox':user['email'], 'name':user['name']}
+	questions = []
+	answers = []
+	types = []
+	responses = []
 
-	# here would be some sort of evaluation
-	evaluated = request.forms.get('evaluated', False)
-	
-	if not evaluated:
-		data = {
-			'actor': actor,
-			'verb': {'id': 'http://adlnet.gov/expapi/verbs/passed', 'display':{'en-US': 'passed'}},
-			'object':{'id': 'some:activity_id_foo'},
-			'context':{'contextActivities':{'other':[{'id':theid}]}}
-			}
-		post_resp = requests.post(settings.LRS_STATEMENT_ENDPOINT, data=json.dumps(data), headers=settings.HEADERS, verify=False)
+	for x in range(1,6):
+		questions.append(request.forms.get('questionasked' + str(x)))
+		answers.append(request.forms.get('answer' + str(x)))
+		types.append(request.forms.get('type' + str(x)))
+		responses.append(request.forms.get('question' + str(x)))
 
-	query_string = '?verb={0}&activity={1}&related_activities={2}'.format('http://adlnet.gov/expapi/verbs/passed', theid, 'true')
-	get_resp = requests.get(settings.LRS_STATEMENT_ENDPOINT + query_string , headers=settings.HEADERS, verify=False)
-	
-	results = json.loads(get_resp.content)
-	stmt_results = results['statements']
+	test_name = 'activity:%s_quiz' % testname
+	display_name = urllib.unquote_plus(testname) + ' quiz'
+
+	wrong, data = util.get_result_statements(responses, answers, types, questions, actor, test_name, display_name, fwkid, theid)
+	post_resp = requests.post(settings.LRS_STATEMENT_ENDPOINT, data=json.dumps(data), headers=settings.HEADERS, verify=False)
+	status = post_resp.status_code
+	content = post_resp.content
+
+   	stmt_results = util.retrieve_statements(status, content, theid, actor)
 
 	achieved = False
-	for stmt in stmt_results:
-		if 'context' in stmt:
-			if 'contextActivities' in stmt['context']:
-				if 'other' in stmt['context']['contextActivities']:
-					for acts in stmt['context']['contextActivities']['other']:
-						if theid in acts['id']:
-							achieved = True
-							break
+	latest_attempt = stmt_results[0]
+
+	if latest_attempt["verb"]["id"] == "http://adlnet.gov/expapi/verbs/passed":
+		achieved = True
 
 	if achieved:
-		achieved_data = {
-			'actor': {'mbox':user['email'], 'name':user['name']},
-			'verb': {'id': 'http://adlnet.gov/expapi/verbs/achieved', 'display':{'en-US': 'achieved'}},
-			'object':{'id': theid},
-			'context':{'contextActivities':{'parent':[{'id':fwkid}]}}
-			}	
-		post_resp = requests.post(settings.LRS_STATEMENT_ENDPOINT, data=json.dumps(achieved_data), headers=settings.HEADERS, verify=False)
 		util.setAchievement(theid, username)
-	return "<p> ok %s</p><p>Your progress has been recorded. <a href='/me'>Back to list</a>" % theid
+
+	return template('./templates/results', theid=theid, passed=achieved)
 
 @bottle.get('/admin/reset')
 def reset():
