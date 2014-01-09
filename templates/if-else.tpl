@@ -15,7 +15,7 @@
     <script type="text/javascript">
         var data = [
 		    {
-		        "question": "this is true", 
+		        "question": "An else statement contains the block of code that executes if the conditional expression in the if statement resolves to 0 or a false value.", 
 		        "type": "true/false", 
 		        "correct": true, 
 		        "answers": [
@@ -24,7 +24,16 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "Else statements are optional.", 
+		        "type": "true/false", 
+		        "correct": true, 
+		        "answers": [
+		            true, 
+		            false
+		        ]
+		    }, 
+		    {
+		        "question": "You can have more than one else statement following an if statement.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -33,76 +42,61 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
-		        "type": "true/false", 
-		        "correct": false, 
-		        "answers": [
-		            true, 
-		            false
-		        ]
-		    }, 
-		    {
-		        "question": "type in ok cool", 
+		        "question": "If-then(-else) constructs are considered what in programming languages?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "ok", 
-		            "cool"
+		            "conditional", 
+		            "statements"
 		        ]
 		    }, 
 		    {
-		        "question": "type in HOLLA BACK", 
+		        "question": "In Python, what statements allows you to check multiple expressions for truth value and execute a block of code as soon as one of the conditions evaluates to true?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "HOLLA", 
-		            "BACK"
+		            "elif"
 		        ]
 		    }, 
 		    {
-		        "question": "type in 3", 
+		        "question": "In Python, if..elif statements can simulate what other kind of statement?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "3"
+		            "case",
+		            "statements"
 		        ]
 		    }, 
 		    {
-		        "question": "type in yall", 
+		        "question": "In Python, what character must follow the if...elif...else statements when it is not a one-liner?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "yall"
+		            ":"
 		        ]
 		    }, 
 		    {
-		        "question": "third one", 
+		        "question": "Is this a valid one-line if/else statement in Python? - value_when_true if condition else value_when_false", 
 		        "type": "choice", 
-		        "correct": "3", 
+		        "correct": "Yes", 
 		        "answers": [
-		            "1", 
-		            "2", 
-		            "3", 
-		            "4"
+		            "Yes", 
+		            "No", 
 		        ]
 		    }, 
 		    {
-		        "question": "last one", 
+		        "question": "In Python, if x=3, what gets printed? - if x < 3: print 'Hello' elif x > 3: print 'Hola' else: print 'Bonjour'", 
 		        "type": "choice", 
-		        "correct": "four", 
+		        "correct": "Bonjour", 
 		        "answers": [
-		            "one", 
-		            "two", 
-		            "three", 
-		            "four"
+		            "Hello", 
+		            "Hola", 
+		            "Bonjour"
 		        ]
 		    }, 
 		    {
-		        "question": "try with spaces second one", 
+		        "question": "In Python, if x=0, what gets printed? - 'Hola' if x == 0 else 'Hello'", 
 		        "type": "choice", 
-		        "correct": "second", 
+		        "correct": "Hola", 
 		        "answers": [
-		            "first ", 
-		            " second", 
-		            "third ", 
-		            " last"
-		        ]
+		            "Hola", 
+		            "Hello"		        ]
 		    }
 		]
 
@@ -155,11 +149,11 @@
 	<form class="navbar-form navbar-left" role="search" method="post">
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>-->
-            <form action="#" method="post" id="quiz" role="form">
+            <form action="/test" method="post" id="quiz" role="form">
 				<div class="form-group">
 					<input type="hidden" name="compid" class="form-control" value={{compid}}>
 					<input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
-					<input type="hidden" name="testname" class="form-control" value='thetest'>
+					<input type="hidden" name="testname" class="form-control" value="if-else">
 				</div>
                 <div class="form-group" id="fg1">
                 </div>

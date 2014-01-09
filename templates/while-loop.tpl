@@ -15,7 +15,7 @@
     <script type="text/javascript">
         var data = [
 		    {
-		        "question": "this is true", 
+		        "question": "While loops execute until the expression is false", 
 		        "type": "true/false", 
 		        "correct": true, 
 		        "answers": [
@@ -24,7 +24,16 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "While loops in Python can have an else block.", 
+		        "type": "true/false", 
+		        "correct": true, 
+		        "answers": [
+		            true, 
+		            false
+		        ]
+		    }, 
+		    {
+		        "question": "A continue statement in the while loop causes the execution to exit the loop.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -33,7 +42,17 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "What is the statement that causes execution to leave the loop in Python?", 
+		        "type": "short answer", 
+		        "correct": [
+		            "continue", 
+		            "end",
+		            "quit",
+		            "break"
+		        ]
+		    }, 
+		    {
+		        "question": "Python requires brackets around a while loop execution block.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -42,66 +61,46 @@
 		        ]
 		    }, 
 		    {
-		        "question": "type in ok cool", 
+		        "question": "A while loop continues when the expression is *blank*", 
 		        "type": "short answer", 
 		        "correct": [
-		            "ok", 
-		            "cool"
+		            "true"
 		        ]
 		    }, 
 		    {
-		        "question": "type in HOLLA BACK", 
+		        "question": "What is the indentifying keyword used in Python for a while loop?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "HOLLA", 
-		            "BACK"
+		            "while"
 		        ]
 		    }, 
 		    {
-		        "question": "type in 3", 
-		        "type": "short answer", 
-		        "correct": [
-		            "3"
-		        ]
-		    }, 
-		    {
-		        "question": "type in yall", 
-		        "type": "short answer", 
-		        "correct": [
-		            "yall"
-		        ]
-		    }, 
-		    {
-		        "question": "third one", 
+		        "question": "What is the term used to describe a loop that never ends?", 
 		        "type": "choice", 
-		        "correct": "3", 
+		        "correct": "infinite", 
 		        "answers": [
-		            "1", 
-		            "2", 
-		            "3", 
-		            "4"
+		            "infinite", 
+		            "never-ending", 
+		            "eternal", 
+		            "continuous"
 		        ]
 		    }, 
 		    {
-		        "question": "last one", 
-		        "type": "choice", 
-		        "correct": "four", 
+		        "question": "In Python the break statement enters the else block of the while before exiting.", 
+		        "type": "true/false", 
+		        "correct": false, 
 		        "answers": [
-		            "one", 
-		            "two", 
-		            "three", 
-		            "four"
+		            true, 
+		            false
 		        ]
 		    }, 
 		    {
-		        "question": "try with spaces second one", 
-		        "type": "choice", 
-		        "correct": "second", 
+		        "question": "In Python the continue statement enters the else block of the while before continuing.", 
+		        "type": "true/false", 
+		        "correct": false, 
 		        "answers": [
-		            "first ", 
-		            " second", 
-		            "third ", 
-		            " last"
+		            true, 
+		            false
 		        ]
 		    }
 		]
@@ -155,11 +154,11 @@
 	<form class="navbar-form navbar-left" role="search" method="post">
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>-->
-            <form action="#" method="post" id="quiz" role="form">
+            <form action="/test" method="post" id="quiz" role="form">
 				<div class="form-group">
 					<input type="hidden" name="compid" class="form-control" value={{compid}}>
 					<input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
-					<input type="hidden" name="testname" class="form-control" value='thetest'>
+					<input type="hidden" name="testname" class="form-control" value='while-loop'>
 				</div>
                 <div class="form-group" id="fg1">
                 </div>
