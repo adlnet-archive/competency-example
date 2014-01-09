@@ -376,3 +376,47 @@ def getTitle(xml):
 
 def getDescription(xml):
 	return xml.find('lom:lom/lom:general/lom:description/lom:string[@language="en"]', namespaces=namespaces).text.strip()
+
+def get_result_statements(responses, answers, types, questions, actor, quiz_name, display_name, fwkid, theid):
+	data = []
+
+	wrong = grade_results(types, answers, responses)
+	
+	data.append({
+		'actor': actor,
+		'verb': {'id': 'http://adlnet.gov/expapi/verbs/passed', 'display':{'en-US': 'passed'}},
+		'object':{'id':quiz_name, 'definition':{'name':{'en-US':display_name}}},
+		'context':{'contextActivities':{'other':[{'id': fwkid}, {'id': theid}]}},
+		'result':{'score':{'min': 0, 'max': 5, 'raw': 5 - wrong}}
+	})
+
+	if wrong >= 2:
+		data[0]['verb']['id'] = 'http://adlnet.gov/expapi/verbs/failed'
+		data[0]['verb']['display']['en-US'] = 'failed'
+	return wrong, data
+
+def retrieve_statements(status, post_content, theid, actor):
+	stmts = []
+	if status == 200:
+		content = json.loads(post_content)
+
+		query_string = "?activity={0}&related_activities={1}&agent={2}".format(theid, "true", str(actor))
+		get_resp = requests.get(settings.LRS_STATEMENT_ENDPOINT + query_string , headers=settings.HEADERS, verify=False)
+		stmts = json.loads(get_resp.content)['statements']
+
+	return stmts
+
+def grade_results(types, answers, responses):
+	wrong = 0
+	for x in range(0,5):
+		if types[x] == 'true/false':
+			if answers[x] != responses[x]:
+				wrong += 1
+		elif types[x] == 'choice':
+			if answers[x].strip() != responses[x].strip():
+				wrong += 1
+		else:
+			if not set(answers[x].lower().strip().split(",")).issubset([str(i).lower().strip() for i in responses[x].split(" ")]):
+				wrong += 1
+	return wrong
+

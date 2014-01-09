@@ -26,37 +26,17 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Main</a>
-<a href="/me" class="navbar-brand">My Competencies</a>
 </nav>
 <div class="container">
-	<div class="page-header">
-		<h1>Tetris Badges <small>Can you become the Tetris master and collect all of the badges?</small></h1>
-	</div>
-	%if error:
-		<div class="alert alert-danger">{{error}}</div>
+	<p>After you took the quiz, behind the scenes this app calculated your results and set the passed field for that competetency in your competetency framework. Ideally, these 
+	quizzes would be hosted independently and the app would read from their performance frameworks to see what warrants a passing grade (kind of like how the Tetris example awards badges). 
+	For now this is just another quick way to show the use of the LRS in these situations.</p>
+	<br>
+	<br>
+	%if passed:
+	<p>Your progress has been recorded. You passed the competency {{theid}} <a href='/me'>Back to list</a></p>
 	%else:
-		%for component in fwk["components"]:
-			<div class="col-xs-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">{{component["id"]}}</h3>
-					</div>
-					<div class="panel-body">
-						<p><b>{{component["title"]}}</b></p>
-						<br>
-						%for pl in component["performancelevels"]:
-							%png = pl["id"] + ".png"
-							%tit = pl["id"].replace("_", " ")
-							<p><img src="../static/badges/{{png}}"><b>{{tit}}</b> - {{pl["description"]}}</p>
-						%end
-					</div>
-				</div>
-			</div>
-		%end	
-	%end
-	<br>
-	<br>
+	<p>Your progress has been recorded. You did not pass the competency {{theid}} <a href='/me'>Back to list</a></p>
 </div>
 </body>
 </html>
