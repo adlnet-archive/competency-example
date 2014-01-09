@@ -228,8 +228,8 @@ def getContentURLsFromLR(compuri):
 	#####!!!!!!! hack
 	compuri = compuri[:7] + 'www.' + compuri[7:]
 	#####!!!!!!!! end hack
-	# url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
-	url = "https://node02.public.learningregistry.net/slice?any_tags=%s" % compuri
+	url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
+	# url = "https://node02.public.learningregistry.net/slice?any_tags=%s" % compuri
 	resp = requests.get(url)
 	if resp.status_code != 200:
 		return None
