@@ -192,9 +192,14 @@ def getComp(compuri, user=None):
 			return comp
 
 	fixed = compuri if not compuri.endswith('.xml') else compuri[:-4]
-	comp = db.compfwk.find_one({"entry":compuri}, {"_id":0})
+	comp = db.compfwk.find_one({"entry":fixed}, {"_id":0})
 	if comp:
 		return comp
+	elif fixed.find('www.') > -1:
+		fixed = ''.join(fixed.split('www.'))
+		comp = db.compfwk.find_one({"entry":fixed}, {"_id":0})
+		if comp:
+			return comp
 
 	comp = parseCompetencies(compuri)
 
