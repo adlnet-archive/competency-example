@@ -55,7 +55,7 @@
 		<br>
 		<br>
 		<!--Replace href with url of tetris game-->
-		<a href="https://lrs.adlnet.gov/prototypes/" class="btn btn-primary" role="button">Play Tetris!</a>	
+		<a href="https://lrs.adlnet.gov/prototypes/" class="btn btn-primary" role="button" target="_blank">Play Tetris!</a>	
 		<br>
 		<br>
 		<a class="btn btn-primary" href="/badges" role="button">All Badges</a>
