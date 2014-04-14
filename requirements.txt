@@ -8,3 +8,4 @@ pymongo==2.6.3
 pyquery==1.2.6
 requests==2.0.1
 wsgiref==0.1.2
+gunicorn==18.0
