@@ -22,8 +22,13 @@
         var competency = comp;
 
         // Youtube videos don't have children
-        var objectURI = player.media.children[0].src ? player.media.children[0].src : player.media.src;
-        var videoActivity = {"id":objectURI, "definition":{"name": {"en-US":playerID}}};
+        var objectURI = "act:unknown";
+        if (player.media.children) {
+            objectURI = player.media.children[0].src
+        }
+        else {
+            objectURI = player.media.src;
+        }        var videoActivity = {"id":objectURI, "definition":{"name": {"en-US":playerID}}};
         
         // Edit the actor inside of the wrapper or just include it here
         var actor = ADL.XAPIWrapper.lrs.actor ? ADL.XAPIWrapper.lrs.actor :
