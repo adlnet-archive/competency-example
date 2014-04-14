@@ -10,6 +10,20 @@
             return true;
         }
         catch(e){return false;}
+    }
+
+    function getcomps(comp) {
+        if (comp) {
+            if (comp instanceof Array){
+                var ret = [];
+                for(var i = 0; i < comp.length; i++){
+                    ret.push({"id": comp[i]})
+                }
+                return ret;
+            }
+            return [{"id": comp}];
+        }
+        return [];
     } 
 
     function PopcornVideo(player, comp) {
@@ -20,7 +34,8 @@
         var thirdQuartileHit = false;
 	var ended = false;
         var isTracking = true;
-        var competency = comp;
+        var comparray = getcomps(comp);
+        var hascompetency = comp;
 
         // Youtube videos don't have children
         var objectURI = player.media.children[0].src ? player.media.children[0].src : player.media.src;
@@ -109,8 +124,8 @@
 
         function startstuff(launched){
             var stmt = {"actor":getactor(), "object": videoActivity}
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}}
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}}
             }
 
             if (launched){
@@ -137,8 +152,8 @@
                     "result":result}
             var context = {"contextActivities":{"parent":[{"id": objectURI}]}};
             
-            if (competency){
-                context["contextActivities"]["other"] = [{"id": competency}]
+            if (hascompetency){
+                context["contextActivities"]["other"] = comparray;
             }
             stmt["context"] = context
             result["extensions"][extKey] = bench
@@ -152,8 +167,8 @@
                     "object":videoActivity, 
                     "result":{"extensions":{"resultExt:paused":paused}}}
 
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}}
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}}
             }
             report(stmt);
         }
@@ -165,8 +180,8 @@
                     "object":videoActivity, 
                     "result":{"extensions":{"resultExt:seeked": seeked}}}
             
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}}
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}}
             }             
             report(stmt);
         }
@@ -180,14 +195,14 @@
                     "object":videoActivity, 
                     "result":{"duration":duration, "completion": true}}
 
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": competency}]}};
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}};
                 
                 var stmtpassed = {"actor":getactor(), 
                     "verb":ADL.verbs.passed, 
                     "object":videoActivity, 
                     "result":{"duration":duration, "completion": true},
-                    "context":{"contextActivities":{"other" : [{"id": competency}]}}}
+                    "context":{"contextActivities":{"other" : comparray}}}
                 multireport([stmt, stmtpassed], function(r){console.log(r)});
             }
 	    else {
