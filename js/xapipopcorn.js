@@ -38,8 +38,15 @@
         var hascompetency = comp;
 
         // Youtube videos don't have children
-        var objectURI = player.media.children[0].src ? player.media.children[0].src : player.media.src;
+        var objectURI = "act:unknown";
+        if (player.media.children) {
+            objectURI = player.media.children[0].src
+        }
+        else {
+            objectURI = player.media.src;
+        }        var videoActivity = {"id":objectURI, "definition":{"name": {"en-US":playerID}}};
         var videoActivity = {"id":objectURI};
+
         
         // Edit the actor inside of the wrapper or just include it here
         var getactor = function() {
