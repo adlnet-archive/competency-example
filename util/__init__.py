@@ -228,8 +228,8 @@ def getContentURLsFromLR(compuri):
 	#####!!!!!!! hack
 	compuri = compuri[:7] + 'www.' + compuri[7:]
 	#####!!!!!!!! end hack
-	url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
-	# url = "https://node02.public.learningregistry.net/slice?any_tags=%s" % compuri
+	# url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
+	url = "https://node02.public.learningregistry.net/slice?any_tags=%s" % compuri
 	resp = requests.get(url)
 	if resp.status_code != 200:
 		return None
@@ -268,7 +268,16 @@ def parse(xmlbit):
 		if not obj.get('competencies', False):
 			obj['competencies'] = []
 		url = addXMLSuffix(include.find('cf:Entry', namespaces=namespaces).text.strip())
-		nxt = ET.fromstring(requests.get(url).text)
+		# HACK FOR ADL NETWORK
+		try:
+			nxt = ET.fromstring(requests.get(url).text)
+		except Exception, e:
+			if not 'www.' in url:
+				url = "http://www." + url[7:]
+				nxt = ET.fromstring(requests.get(url).text)
+			else:
+				raise e				
+			
 		c = parse(nxt)
 		obj['competencies'].append(c)
 	return structure(xmlbit, obj)
@@ -417,3 +426,4 @@ def grade_results(types, answers, responses):
 			if not set(answers[x].lower().strip().split(",")).issubset([str(i).lower().strip() for i in responses[x].split(" ")]):
 				wrong += 1
 	return wrong
+
