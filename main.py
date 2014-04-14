@@ -315,4 +315,4 @@ def reset():
 
 if __name__ == '__main__':
 	util.parsePerformanceFwk()
-	run(app, host='localhost', port=8888, reloader=True)
+	run(app, host='0.0.0.0', port=8888, server='gunicorn')
