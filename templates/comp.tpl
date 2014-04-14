@@ -26,6 +26,18 @@
 			<div class="alert alert-success">
 				Congrats! You've achieved all the competencies in this list!
 			</div>
+		%else:
+ 			%if username:
+ 			<form class="form-inline" role="form" method="post" action="/update">
+ 				<input type="hidden" name="fwkid" class="form-control" value="{{fwk['entry']}}">
+ 				<div class="form-group">
+ 					<input type="hidden" class="form-control" name="endpoint" id="endpoint" value="http://lrs.adlnet.gov/xapi/" required>
+ 					<input type="hidden" class="form-control" name="name" id="name" value="tom" required>
+ 					<input type="hidden" class="form-control" name="password" id="password" value="1234" required>
+ 				</div>
+ 				<button type="submit" class="btn btn-default">Update</button>
+ 			</form>
+ 			%end
 		%end
 	</div>
 </div>
