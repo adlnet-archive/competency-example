@@ -44,8 +44,8 @@
         }
         else {
             objectURI = player.media.src;
-        }        var videoActivity = {"id":objectURI, "definition":{"name": {"en-US":playerID}}};
-        var videoActivity = {"id":objectURI};
+        }        
+	var videoActivity = {"id":objectURI, "definition":{"name": {"en-US":playerID}}};
 
         
         // Edit the actor inside of the wrapper or just include it here
