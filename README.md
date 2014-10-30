@@ -23,6 +23,7 @@ ADL xAPI / Medbiquitous Competency Example
 	$ git clone https://github.com/adlnet/competency-example.git
 	$ cd competency-example
 	$ virtualenv env
+	$ source env/bin/activate
 	$ pip install -r requirements.txt
 	```
 
