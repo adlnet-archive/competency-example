@@ -15,7 +15,7 @@
     <script type="text/javascript">
         var data = [
 		    {
-		        "question": "this is true", 
+		        "question": "A function is a block of code the performs some sort of task.", 
 		        "type": "true/false", 
 		        "correct": true, 
 		        "answers": [
@@ -24,7 +24,16 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "In python functions are first class objects, which means it can be assigned to a variable and passed around like any other object.", 
+		        "type": "true/false", 
+		        "correct": true, 
+		        "answers": [
+		            true, 
+		            false
+		        ]
+		    }, 
+		    {
+		        "question": "A function without a name is called an unknown function.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -33,75 +42,68 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "What is the keyword for defining a simple anonymous function in Python?", 
+		        "type": "short answer", 
+		        "correct": [
+		            "delta", 
+		            "theta",
+		            "sigma",
+		            "lambda"
+		        ]
+		    }, 
+		    {
+		        "question": "What is the keyword for defining a typical named function in Python?", 
+		        "type": "short answer", 
+		        "correct": [
+		            "delta", 
+		            "def",
+		            "function",
+		            "for"
+		        ]
+		    }, 
+		    {
+		        "question": "Values passed into a function are called its parameters.", 
 		        "type": "true/false", 
-		        "correct": false, 
+		        "correct": true, 
 		        "answers": [
 		            true, 
 		            false
 		        ]
 		    }, 
 		    {
-		        "question": "type in ok cool", 
-		        "type": "short answer", 
-		        "correct": [
-		            "ok", 
-		            "cool"
-		        ]
-		    }, 
-		    {
-		        "question": "type in HOLLA BACK", 
-		        "type": "short answer", 
-		        "correct": [
-		            "HOLLA", 
-		            "BACK"
-		        ]
-		    }, 
-		    {
-		        "question": "type in 3", 
-		        "type": "short answer", 
-		        "correct": [
-		            "3"
-		        ]
-		    }, 
-		    {
-		        "question": "type in yall", 
-		        "type": "short answer", 
-		        "correct": [
-		            "yall"
-		        ]
-		    }, 
-		    {
-		        "question": "third one", 
-		        "type": "choice", 
-		        "correct": "3", 
+		        "question": "In Python values passed into a function can be assigned default values.", 
+		        "type": "true/false", 
+		        "correct": true, 
 		        "answers": [
-		            "1", 
-		            "2", 
-		            "3", 
-		            "4"
+		            true, 
+		            false
 		        ]
 		    }, 
 		    {
-		        "question": "last one", 
+		        "question": "What is the keyword used to send a value back to the caller of a function in Python?", 
 		        "type": "choice", 
-		        "correct": "four", 
+		        "correct": "return", 
 		        "answers": [
-		            "one", 
-		            "two", 
-		            "three", 
-		            "four"
+		            "give", 
+		            "send", 
+		            "return", 
+		            "none of the above"
 		        ]
 		    }, 
 		    {
-		        "question": "try with spaces second one", 
-		        "type": "choice", 
-		        "correct": "second", 
+		        "question": "*blank* is the method of a function calling itself during execution.", 
+		        "type": "short answer", 
+		        "correct": [
+		            "recursion"
+		        ]
+		    }, 
+		    {
+		        "question": "In Python a function can accept a dictionary of parameters by having an argument preceeded by two asterisks (*).", 
+		        "type": "true/false", 
+		        "correct": true, 
 		        "answers": [
-		            "first ", 
-		            " second", 
-		            "third ", 
-		            " last"
+		            true, 
+		            false
 		        ]
 		    }
 		]
@@ -146,7 +148,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-	<a href="/me" class="navbar-brand">My Competencies</a>
+	<a class="navbar-brand" href="/">Competency</a>
 	<p class="navbar-text navbar-right">Signed in as {{user}}</p>
 	</nav>	
     <div class="jumbotron">
@@ -155,11 +157,11 @@
 	<form class="navbar-form navbar-left" role="search" method="post">
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>-->
-            <form action="#" method="post" id="quiz" role="form">
+            <form action="/test" method="post" id="quiz" role="form">
 				<div class="form-group">
 					<input type="hidden" name="compid" class="form-control" value={{compid}}>
 					<input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
-					<input type="hidden" name="testname" class="form-control" value='thetest'>
+					<input type="hidden" name="testname" class="form-control" value='understanding-functions'>
 				</div>
                 <div class="form-group" id="fg1">
                 </div>

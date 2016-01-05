@@ -52,14 +52,6 @@
 		<button type="submit" class="btn btn-default">Sign in</button>
 	</form>	
 	%end
-	<a class="navbar-brand" href="/admin/reset" style="float:right">Admin Reset</a>
-	<form class="navbar-form navbar-right" role="form" method="post">
-		<div class="form-group">
-			<label class="sr-only" for="frameworkurl">framework url</label>
-			<input type="text" class="form-control" name="frameworkurl" id="frameworkurl" placeholder="Framework URL">
-		</div>
-		<button type="submit" class="btn btn-alt navbar-button">Add framework</button>
-	</form>
 </nav>
 <div class="container">
 	<div class="page-header">
@@ -68,9 +60,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 		%if username:
-			%if comps != 0:
-				<a href="/me" class="btn btn-primary btn-xs" role="button">Go to your competencies</a>
-			%end
+			<a href="/all_comps" class="btn btn-primary btn-xs" role="button">Get Started</a>
 		%else:
 			<p>You are not signed in. Sign in above if you're an existing member. If you are new, include an email and name, too</p>
 			%if error:
@@ -101,33 +91,7 @@
 	</div>
 	<br>
 	<br>
-	<div class="row">
-	%if fwks.count() == 0:
-		<div class="col-xs-12">
-			No competency frameworks? Try these out:
-			<ul>
-				<li>http://adlnet.gov/competency-framework/computer-science/basic-programming (Basic Programming)</li>
-				<li>http://adlnet.gov/competency-framework/scorm/choosing-an-lms (Choosing an LMS)</li>
-			</ul>
-		</div>
-	%else:
-		%for fwk in fwks:
-		<div class="col-xs-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">{{fwk['title']}}</h3>
-				</div>
-				<div class="panel-body">
-					<p>{{fwk['description']}}</p>
-					%if username:
-					<p><a href="/me?uri={{fwk['encodedentry']}}" class="btn btn-primary" role="button">Go</a></p>
-					%end
-				</div>
-			</div>
-		</div>
-		%end
-	%end	
-	</div>
+	<p>Welcome to the ADL Competency App! To get started, please login, or if you're new, create a username and password. Once you click the 'Get Started' button, the app will take you to the All Competencies page that lists all of the competency frameworks that have been added to the system. If there aren't any listed, there are three links above you can click to add those competencies to the system. Once you add the ones you want, they will appear below and you can click them to add them to YOUR competency list. Once they have been added to your list, click 'My Competencies' to begin the activites associated with each competency. When viewing the competency, you have the chance to change the LRS endpoint above it. Click each competency link listed to complete the necessary activity to achieve the competency. If you're looking at the Tetris competency, you'll be able to view the badges you have earned while playing by clicking the 'My Badges' button, or you can view all possible badges to attain by clicking the 'All Badges' button. NOTE: On each competency page you'll have the option to change the LRS endpoint. All that does is show you what competencies you have met at that particular endpoint for that particular subject. Everytime you leave the page it will get set back to the default endpoint.</p>
 </div>
 </body>
 </html>

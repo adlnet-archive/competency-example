@@ -15,7 +15,7 @@
     <script type="text/javascript">
         var data = [
 		    {
-		        "question": "this is true", 
+		        "question": "Python allows multiple assignment.", 
 		        "type": "true/false", 
 		        "correct": true, 
 		        "answers": [
@@ -24,7 +24,16 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "When creating a string in Python, you can use double or single quotes.", 
+		        "type": "true/false", 
+		        "correct": true, 
+		        "answers": [
+		            true, 
+		            false
+		        ]
+		    }, 
+		    {
+		        "question": "Python list indexes start with 1.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -33,75 +42,73 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
-		        "type": "true/false", 
-		        "correct": false, 
-		        "answers": [
-		            true, 
-		            false
-		        ]
-		    }, 
-		    {
-		        "question": "type in ok cool", 
+		        "question": "What are variables?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "ok", 
-		            "cool"
+		            "reserved", 
+		            "memory",
+		            "locations",
+		            "to",
+		            "store",
+		            "values"
 		        ]
 		    }, 
 		    {
-		        "question": "type in HOLLA BACK", 
+		        "question": "What are the four different numerical types in Python?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "HOLLA", 
-		            "BACK"
+		            "int", 
+		            "long",
+		            "float",
+		            "complex"
 		        ]
 		    }, 
 		    {
-		        "question": "type in 3", 
+		        "question": "In Python, tuples can be thought of as *blank* lists.", 
 		        "type": "short answer", 
 		        "correct": [
-		            "3"
+		            "read-only"
 		        ]
 		    }, 
 		    {
-		        "question": "type in yall", 
+		        "question": "What sign is used to assign values to variables in Python?", 
 		        "type": "short answer", 
 		        "correct": [
-		            "yall"
+		            "="
 		        ]
 		    }, 
 		    {
-		        "question": "third one", 
+		        "question": "Which is not a standard data type in Python?", 
 		        "type": "choice", 
-		        "correct": "3", 
+		        "correct": "Queue", 
 		        "answers": [
-		            "1", 
-		            "2", 
-		            "3", 
-		            "4"
+		            "Numbers", 
+		            "String", 
+		            "List", 
+		            "Queue",
+		            "Tuple",
+		            "Dictionary"
 		        ]
 		    }, 
 		    {
-		        "question": "last one", 
+		        "question": "Python dictionaries are enclosed by what?", 
 		        "type": "choice", 
-		        "correct": "four", 
+		        "correct": "{}", 
 		        "answers": [
-		            "one", 
-		            "two", 
-		            "three", 
-		            "four"
+		            "{}", 
+		            "[]", 
+		            "()"
 		        ]
 		    }, 
 		    {
-		        "question": "try with spaces second one", 
+		        "question": "In Python, what function would you use to covert object x to a string representation?", 
 		        "type": "choice", 
-		        "correct": "second", 
+		        "correct": "str(x)", 
 		        "answers": [
-		            "first ", 
-		            " second", 
-		            "third ", 
-		            " last"
+		            "repr(x)", 
+		            "str(x)", 
+		            "chr(x)", 
+		            "unichr(x)"
 		        ]
 		    }
 		]
@@ -146,7 +153,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-	<a href="/me" class="navbar-brand">My Competencies</a>
+	<a class="navbar-brand" href="/">Competency</a>
 	<p class="navbar-text navbar-right">Signed in as {{user}}</p>
 	</nav>	
     <div class="jumbotron">
@@ -155,11 +162,11 @@
 	<form class="navbar-form navbar-left" role="search" method="post">
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>-->
-            <form action="#" method="post" id="quiz" role="form">
+            <form action="/test" method="post" id="quiz" role="form">
 				<div class="form-group">
 					<input type="hidden" name="compid" class="form-control" value={{compid}}>
 					<input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
-					<input type="hidden" name="testname" class="form-control" value='thetest'>
+					<input type="hidden" name="testname" class="form-control" value="understanding-variables">
 				</div>
                 <div class="form-group" id="fg1">
                 </div>

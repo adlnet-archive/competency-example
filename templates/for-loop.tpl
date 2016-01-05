@@ -15,7 +15,7 @@
     <script type="text/javascript">
         var data = [
 		    {
-		        "question": "this is true", 
+		        "question": "For loops can be used to iterate over lists and arrays.", 
 		        "type": "true/false", 
 		        "correct": true, 
 		        "answers": [
@@ -24,7 +24,16 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "Simple iterations over lists can be done with list comprehension instead of for loops.", 
+		        "type": "true/false", 
+		        "correct": true, 
+		        "answers": [
+		            true, 
+		            false
+		        ]
+		    }, 
+		    {
+		        "question": "A continue statement in the for loop causes the execution to exit the loop.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -33,7 +42,17 @@
 		        ]
 		    }, 
 		    {
-		        "question": "this is false", 
+		        "question": "What is the statement that causes execution to leave the loop in Python?", 
+		        "type": "short answer", 
+		        "correct": [
+		            "continue", 
+		            "end",
+		            "quit",
+		            "break"
+		        ]
+		    }, 
+		    {
+		        "question": "Python requires brackets around a for loop execution block.", 
 		        "type": "true/false", 
 		        "correct": false, 
 		        "answers": [
@@ -42,66 +61,48 @@
 		        ]
 		    }, 
 		    {
-		        "question": "type in ok cool", 
-		        "type": "short answer", 
-		        "correct": [
-		            "ok", 
-		            "cool"
-		        ]
-		    }, 
-		    {
-		        "question": "type in HOLLA BACK", 
-		        "type": "short answer", 
-		        "correct": [
-		            "HOLLA", 
-		            "BACK"
-		        ]
-		    }, 
-		    {
-		        "question": "type in 3", 
-		        "type": "short answer", 
-		        "correct": [
-		            "3"
-		        ]
-		    }, 
-		    {
-		        "question": "type in yall", 
-		        "type": "short answer", 
-		        "correct": [
-		            "yall"
-		        ]
-		    }, 
-		    {
-		        "question": "third one", 
-		        "type": "choice", 
-		        "correct": "3", 
+		        "question": "A for loop continues when there are more items in the sequence.", 
+		        "type": "true/false", 
+		        "correct": true, 
 		        "answers": [
-		            "1", 
-		            "2", 
-		            "3", 
-		            "4"
+		            true, 
+		            false
 		        ]
 		    }, 
 		    {
-		        "question": "last one", 
-		        "type": "choice", 
-		        "correct": "four", 
-		        "answers": [
-		            "one", 
-		            "two", 
-		            "three", 
-		            "four"
+		        "question": "What is the indentifying keyword used in Python for a for loop?", 
+		        "type": "short answer", 
+		        "correct": [
+		            "for"
 		        ]
 		    }, 
 		    {
-		        "question": "try with spaces second one", 
+		        "question": "What is the term used to describe a loop that never ends?", 
 		        "type": "choice", 
-		        "correct": "second", 
+		        "correct": "infinite", 
 		        "answers": [
-		            "first ", 
-		            " second", 
-		            "third ", 
-		            " last"
+		            "infinite", 
+		            "never-ending", 
+		            "eternal", 
+		            "continuous"
+		        ]
+		    }, 
+		    {
+		        "question": "In Python the break statement enters the else block of the for loop before exiting.", 
+		        "type": "true/false", 
+		        "correct": false, 
+		        "answers": [
+		            true, 
+		            false
+		        ]
+		    }, 
+		    {
+		        "question": "In Python the continue statement enters the else block of the for loop when there are no more items.", 
+		        "type": "true/false", 
+		        "correct": true, 
+		        "answers": [
+		            true, 
+		            false
 		        ]
 		    }
 		]
@@ -146,7 +147,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-	<a href="/me" class="navbar-brand">My Competencies</a>
+	<a class="navbar-brand" href="/">Competency</a>
 	<p class="navbar-text navbar-right">Signed in as {{user}}</p>
 	</nav>	
     <div class="jumbotron">
@@ -155,11 +156,11 @@
 	<form class="navbar-form navbar-left" role="search" method="post">
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>-->
-            <form action="#" method="post" id="quiz" role="form">
+            <form action="/test" method="post" id="quiz" role="form">
 				<div class="form-group">
 					<input type="hidden" name="compid" class="form-control" value={{compid}}>
 					<input type="hidden" name="fwkid" class="form-control" value={{fwkid}}>
-					<input type="hidden" name="testname" class="form-control" value='thetest'>
+					<input type="hidden" name="testname" class="form-control" value='for-loop'>
 				</div>
                 <div class="form-group" id="fg1">
                 </div>

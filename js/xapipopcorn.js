@@ -1,6 +1,6 @@
 (function(ADL){
     
-    var debug = false;
+    var debug = true;
     var log = function(message)
     {
         if (!debug) return false;
@@ -10,6 +10,20 @@
             return true;
         }
         catch(e){return false;}
+    }
+
+    function getcomps(comp) {
+        if (comp) {
+            if (comp instanceof Array){
+                var ret = [];
+                for(var i = 0; i < comp.length; i++){
+                    ret.push({"id": comp[i]})
+                }
+                return ret;
+            }
+            return [{"id": comp}];
+        }
+        return [];
     } 
 
     function PopcornVideo(player, comp) {
@@ -18,16 +32,27 @@
         var firstQuartileHit = false;
         var halfwayHit = false;
         var thirdQuartileHit = false;
+	var ended = false;
         var isTracking = true;
-        var competency = comp;
+        var comparray = getcomps(comp);
+        var hascompetency = comp;
 
         // Youtube videos don't have children
-        var objectURI = player.media.children[0].src ? player.media.children[0].src : player.media.src;
-        var videoActivity = {"id":objectURI, "definition":{"name": {"en-US":playerID}}};
+        var objectURI = "act:unknown";
+        if (player.media.children) {
+            objectURI = player.media.children[0].src
+        }
+        else {
+            objectURI = player.media.src;
+        }        
+	var videoActivity = {"id":objectURI, "definition":{"name": {"en-US":playerID}}};
+
         
         // Edit the actor inside of the wrapper or just include it here
-        var actor = ADL.XAPIWrapper.lrs.actor ? ADL.XAPIWrapper.lrs.actor :
+        var getactor = function() {
+            return ADL.XAPIWrapper.lrs.actor ? ADL.XAPIWrapper.lrs.actor :
             {"account":{"name":"tester", "homePage":"uri:testaccount"}};
+        };
 
         // Play event
         myplayer.on("play", function(){
@@ -45,6 +70,7 @@
             // Normal start when vid is launched
             else{
                 log('video ' + playerID + ' launched')
+		ended = false;
                 startstuff(true)
             }
         });
@@ -104,9 +130,9 @@
         });    
 
         function startstuff(launched){
-            var stmt = {"actor":actor, "object": videoActivity}
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+            var stmt = {"actor":getactor(), "object": videoActivity}
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}}
             }
 
             if (launched){
@@ -121,20 +147,20 @@
         }
 
         function middleStuff(quartile, benchTime) {
-            var benchObj = {"id":objectURI + "#" + quartile, "definition":{"name":{"en-US":playerID + "#" + quartile}}};
+            var benchObj = {"id":objectURI + "#" + quartile};
             var bench = "PT" + benchTime + "S";
             var extKey = "resultExt:" + quartile
             var result = {"extensions":{}};
             
 
-            var stmt = {"actor":actor,
+            var stmt = {"actor":getactor(),
                     "verb":ADL.verbs.progressed,
                     "object":benchObj,
                     "result":result}
             var context = {"contextActivities":{"parent":[{"id": objectURI}]}};
             
-            if (competency){
-                context["contextActivities"]["other"] = [{"id": "compID:" + competency}]
+            if (hascompetency){
+                context["contextActivities"]["other"] = comparray;
             }
             stmt["context"] = context
             result["extensions"][extKey] = bench
@@ -143,44 +169,70 @@
 
         function pauseStuff(pauseTime){
             var paused = "PT" + pauseTime + "S";
-            var stmt = {"actor":actor, 
+            var stmt = {"actor":getactor(), 
                     "verb":ADL.verbs.suspended,
                     "object":videoActivity, 
                     "result":{"extensions":{"resultExt:paused":paused}}}
 
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}}
             }
             report(stmt);
         }
 
         function seekStuff(seekTime){
             var seeked = "PT" + seekTime + "S";
-            var stmt = {"actor":actor, 
+            var stmt = {"actor":getactor(), 
                     "verb":ADL.verbs.interacted,
                     "object":videoActivity, 
                     "result":{"extensions":{"resultExt:seeked": seeked}}}
             
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}}
             }             
             report(stmt);
         }
 
         function endStuff(endTime) {
+ 	    if (ended) return;
+	    ended = true;
             var duration = "PT" + Math.round(endTime) + "S";
-            var stmt = {"actor":actor, 
+            var stmt = {"actor":getactor(), 
                     "verb":ADL.verbs.completed, 
                     "object":videoActivity, 
                     "result":{"duration":duration, "completion": true}}
 
-            if (competency){
-                stmt["context"] = {"contextActivities":{"other" : [{"id": "compID:" + competency}]}}
+            if (hascompetency){
+                stmt["context"] = {"contextActivities":{"other" : comparray}};
+                
+                var stmtpassed = {"actor":getactor(), 
+                    "verb":ADL.verbs.passed, 
+                    "object":videoActivity, 
+                    "result":{"duration":duration, "completion": true},
+                    "context":{"contextActivities":{"other" : comparray}}}
+                multireport([stmt, stmtpassed], function(r){console.log(r)});
             }
-            report(stmt);
+	    else {
+               report(stmt);
+	    }
             // Reset video quartile states
             firstQuartileHit = halfwayHit = thirdQuartileHit = false;
         }
+
+	this.multireport = multireport;
+	function multireport (stmt, callback) {
+	   if (stmt) {
+		for(var i = 0; i < stmt.length; i++)                
+			stmt[i]['timestamp'] = (new Date()).toISOString();
+                if (isTracking) {
+                    ADL.XAPIWrapper.sendStatements(stmt, callback);
+                }
+                else {
+                    log("would send this statement if 'isTracking' was true.");
+                    log(stmt);
+                }
+            }	
+	}
 
         this.report = report;
         function report (stmt) {
