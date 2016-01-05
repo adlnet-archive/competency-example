@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CompetencyFramework xmlns="http://ns.medbiq.org/competencyframework/v1/" 
-					 xmlns:lom="http://ltsc.ieee.org/xsd/LOM" 
-					 xmlns:hx="http://ns.medbiq.org/lom/extend/v1/" 
-					 xmlns:xhtml="http://www.w3.org/1999/xhtml" 
-					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<CompetencyFramework xmlns="http://ns.medbiq.org/competencyframework/v1/"
+					 xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+					 xmlns:hx="http://ns.medbiq.org/lom/extend/v1/"
+					 xmlns:xhtml="http://www.w3.org/1999/xhtml"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 					 xsi:schemaLocation="http://ns.medbiq.org/competencyframework/v1/ competencyframework.xsd http://ltsc.ieee.org/xsd/LOM http://ns.medbiq.org/lom/healthcarelom.xsd http://ns.medbiq.org/lom/extend/v1/ http://ns.medbiq.org/lom/healthcare/healthcaremetadata.xsd http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd">
 	<lom:lom>
 		<lom:general>
 			<lom:identifier>
 				<lom:catalog>URI</lom:catalog>
 				<!-- <lom:entry>http://adlnet.gov/competency-framework/xapi/tetris</lom:entry> -->
-				<lom:entry>http://12.109.40.34/competency-framework/xapi/tetris</lom:entry>
+				<lom:entry>http://40.129.74.199:8080/competency-framework/xapi/tetris</lom:entry>
 			</lom:identifier>
 			<lom:title>
 				<lom:string language="en">Experience API Tetris Master</lom:string>
@@ -50,21 +50,21 @@
 	<Includes>
 		<Catalog>URI</Catalog>
 		<!-- <Entry>http://adlnet.gov/competency/xapi/tetris/levels</Entry> -->
-		<Entry>http://12.109.40.34/competency/xapi/tetris/levels</Entry>
+		<Entry>http://40.129.74.199:8080/competency/xapi/tetris/levels</Entry>
 	</Includes>
 	<Includes>
 		<Catalog>URI</Catalog>
 		<!-- <Entry>http://adlnet.gov/competency/xapi/tetris/score</Entry> -->
-		<Entry>http://12.109.40.34/competency/xapi/tetris/score</Entry>
+		<Entry>http://40.129.74.199:8080/competency/xapi/tetris/score</Entry>
 	</Includes>
 	<Includes>
 		<Catalog>URI</Catalog>
 		<!-- <Entry>http://adlnet.gov/competency/xapi/tetris/time</Entry> -->
-		<Entry>http://12.109.40.34/competency/xapi/tetris/time</Entry>
+		<Entry>http://40.129.74.199:8080/competency/xapi/tetris/time</Entry>
 	</Includes>
 	<Includes>
 		<Catalog>URI</Catalog>
 		<!-- <Entry>http://adlnet.gov/competency/xapi/tetris/lines</Entry> -->
-		<Entry>http://12.109.40.34/competency/xapi/tetris/lines</Entry>
+		<Entry>http://40.129.74.199:8080/competency/xapi/tetris/lines</Entry>
 	</Includes>
 </CompetencyFramework>
