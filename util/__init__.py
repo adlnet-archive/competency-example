@@ -19,9 +19,9 @@ db = mongo.compapp
 # same comp could be in more than
 # one place in this competency framework
 
-# NOTE!! this system works right now because we only call this 
-# after submitting an achieved statement.. if we break up getting 
-# achieved statements, we will need to wipe out the statements in 
+# NOTE!! this system works right now because we only call this
+# after submitting an achieved statement.. if we break up getting
+# achieved statements, we will need to wipe out the statements in
 # the lrs to redemo
 def setAchievement(theid, username, single=None):
 	if single:
@@ -33,13 +33,13 @@ def setAchievement(theid, username, single=None):
 		if comp['entry'] == theid:
 			comp['met'] = True
 			comp['date'] = datetime.datetime.utcnow()
-		
+
 		# look through the whole framework for multiple
 		# references to the same competency
 		if comp.get('competencies', False):
 			for c in comp['competencies']:
 				setAchievement(theid, username, c)
-		
+
 		if rollup(comp):
 			comp['met'] = True
 			comp['date'] = datetime.datetime.utcnow()
@@ -78,16 +78,16 @@ def rollup(comp):
 	return res
 
 def updateCompFwkStatus(username, fwk, endpoint, auth):
-	headers = {        
+	headers = {
 	            'Authorization': auth,
-	            'content-type': 'application/json',        
+	            'content-type': 'application/json',
 	            'X-Experience-API-Version': '1.0.0'
 	    		}
 
 	# if framework comp ['met'] is true: return... everything is already met
 	if fwk.get('met', False):
 		return
-	
+
 	# request achieved with fwk uri and related activities
 	mbox = db.users.find_one({"username":username})['email']
 	actor = urllib.quote_plus(json.dumps({'mbox':mbox}))
@@ -97,7 +97,7 @@ def updateCompFwkStatus(username, fwk, endpoint, auth):
 	achievedquery = query_string.format(actor,achievedverb, fwkentry, 'true')
 
 	get_resp = requests.get(endpoint + achievedquery , headers=headers, verify=False)
-	
+
 	if get_resp.status_code != 200:
 		return
 	achieved_ids = [s['object']['id'] for s in json.loads(get_resp.content)['statements']]
@@ -119,7 +119,7 @@ def updateCompetency(fwkcomp, username, actor, headers, endpoint, subfwk=False):
 			updateCompetency(comp, username, actor, headers, endpoint, True)
 			if rollup(comp):
 				comp['met'] = True
-				comp['date'] = datetime.datetime.utcnow()	
+				comp['date'] = datetime.datetime.utcnow()
 
 		compentry = comp['encodedentry']
 		passedquery = query_string.format(actor,passedverb, compentry, 'true')
@@ -141,7 +141,7 @@ def updateCompetency(fwkcomp, username, actor, headers, endpoint, subfwk=False):
 
 
 def getAllUserComps(username):
-	return db.usercomps.find({"username":username})	
+	return db.usercomps.find({"username":username})
 
 def getUserCompsById(theid, username):
 	mapfunc = """
@@ -191,7 +191,7 @@ def getComp(compuri, user=None):
 			saveComp(comp, user)
 			return comp
 
-	##### hacks for weird url vs uri issues 
+	##### hacks for weird url vs uri issues
 	fixed = compuri if not compuri.endswith('.xml') else compuri[:-4]
 	comp = db.compfwk.find_one({"entry":fixed}, {"_id":0})
 	if comp:
@@ -206,7 +206,7 @@ def getComp(compuri, user=None):
 
 	if comp:
 		saveComp(comp)
-	
+
 	return comp
 
 def saveComp(comp, user=None):
@@ -246,7 +246,7 @@ def parseCompetencies(uri):
 		res = requests.get(uri).text
 	except Exception, e:
 		return None
-	
+
 	try:
 		fmwkxml = ET.fromstring(res)
 	except Exception, e:
@@ -276,8 +276,8 @@ def parse(xmlbit):
 				url = "http://www." + url[7:]
 				nxt = ET.fromstring(requests.get(url).text)
 			else:
-				raise e				
-			
+				raise e
+
 		c = parse(nxt)
 		obj['competencies'].append(c)
 	return structure(xmlbit, obj)
@@ -388,7 +388,7 @@ def get_result_statements(responses, answers, types, questions, actor, quiz_name
 	data = []
 
 	wrong = grade_results(types, answers, responses)
-	
+
 	data.append({
 		'actor': actor,
 		'verb': {'id': 'http://adlnet.gov/expapi/verbs/passed', 'display':{'en-US': 'passed'}},
@@ -426,4 +426,3 @@ def grade_results(types, answers, responses):
 			if not set(answers[x].lower().strip().split(",")).issubset([str(i).lower().strip() for i in responses[x].split(" ")]):
 				wrong += 1
 	return wrong
-

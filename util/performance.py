@@ -40,13 +40,13 @@ def getStatements(objuri, username):
     url = endpoint + finishedquery
     print url
     get_resp = requests.get(url, headers=settings.HEADERS, verify=False)
-    
+
     if get_resp.status_code != 200:
         print "got an error from performance.getStatements: %s" % get_resp.content
         return []
 
     return json.loads(get_resp.content)['statements']
-    
+
 def evaluateTetrisStatements(stmts, perfwkuri, username):
     levels = []
     lines = []
@@ -57,16 +57,16 @@ def evaluateTetrisStatements(stmts, perfwkuri, username):
         lines.append(s['result']['extensions']['ext:lines'])
         scores.append(s['result']['score']['raw'])
         times.append(s['result']['extensions']['ext:time'])
-    
+
     if lines:
         updateLines(lines, perfwkuri, username)
-    
+
     if levels:
         updateLevels(levels, perfwkuri, username)
-    
+
     if scores:
         updateScores(scores, perfwkuri, username)
-    
+
     if times:
         updateTimes(times, perfwkuri, username)
 
@@ -167,14 +167,14 @@ def getCompURIFromPFWK(comp):
             return c['entry']
 
 def getUserTetrisCompPerformances(compuri, username):
-    cf = db.usercomps.find_one({"username":username, "entry":"http://12.109.40.34/competency-framework/xapi/tetris"})
+    cf = db.usercomps.find_one({"username":username, "entry":"http://40.129.74.199:8080/competency-framework/xapi/tetris"})
     for c in cf['competencies']:
         if c['entry'] == compuri:
             return c.get('performances', [])
 
 def saveUserTetrisCompPerformances(compuri, username, perfs):
-    cf = db.usercomps.find_one({"username":username, "entry":"http://12.109.40.34/competency-framework/xapi/tetris"})
+    cf = db.usercomps.find_one({"username":username, "entry":"http://40.129.74.199:8080/competency-framework/xapi/tetris"})
     for c in cf['competencies']:
         if c['entry'] == compuri:
             c['performances'] = perfs
-    db.usercomps.update({"username":username, "entry":"http://12.109.40.34/competency-framework/xapi/tetris"}, cf)
+    db.usercomps.update({"username":username, "entry":"http://40.129.74.199:8080/competency-framework/xapi/tetris"}, cf)
