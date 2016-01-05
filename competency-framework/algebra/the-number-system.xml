@@ -3,7 +3,7 @@
 		<lom:general>
 			<lom:identifier>
 			<lom:catalog>URI</lom:catalog>
-			<lom:entry>http://12.109.40.34/competency-framework/algebra/the-number-system</lom:entry>
+			<lom:entry>http://40.129.74.199:8080/competency-framework/algebra/the-number-system</lom:entry>
 			</lom:identifier>
 			<lom:title>
 			<lom:string language="en">The Number System</lom:string>

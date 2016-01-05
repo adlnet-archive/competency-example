@@ -18,7 +18,7 @@ session_opts = {
 }
 
 app = SessionMiddleware(bottle.app(), session_opts)
- 
+
 mongo = MongoClient()
 db = mongo.compapp
 
@@ -64,17 +64,17 @@ def add_framework(fwk):
 
 	to_add = fwk
 	if to_add == "tetris":
-		util.getComp("http://12.109.40.34/competency-framework/xapi/tetris")
+		util.getComp("http://40.129.74.199:8080/competency-framework/xapi/tetris")
 	elif to_add == "choosinganlms":
-		util.getComp("http://www.adlnet.gov/competency-framework/scorm/choosing-an-lms")
+		util.getComp("http://40.129.74.199:8080/competency-framework/scorm/choosing-an-lms")
 	elif to_add == "basicprogramming":
-		util.getComp("http://www.adlnet.gov/competency-framework/computer-science/basic-programming")
+		util.getComp("http://40.129.74.199:8080/competency-framework/computer-science/basic-programming")
 
-	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)	
+	return template('./templates/all_comps.tpl', fwks=util.getAllSystemComps(), username=username)
 
 @bottle.get('/badges')
 def badges():
-	perfwk = db.perfwk.find_one({"entry":"http://12.109.40.34/performance-framework/xapi/tetris"})
+	perfwk = db.perfwk.find_one({"entry":"http://40.129.74.199:8080/performance-framework/xapi/tetris"})
 	if not perfwk:
 		return template('./templates/badges', fwk={}, error="Tetris badges not found")
 
@@ -93,26 +93,26 @@ def postlogin():
 	s = request.environ.get('beaker.session')
 	username = request.forms.get('username', None)
 	pwd = request.forms.get('password', None)
-	
+
 	if not username or not pwd:
 		return template('./templates/login', error="Username or password was missing")
-	
+
 	users = db.users
 	user = users.find_one({"username":username})
-	
+
 	if user:
 		if not check_password_hash(user['pwd'], pwd):
 			return template('./templates/login', error="Username exists and password didn't match")
 	else:
 		email = request.forms.get('email', None)
 		name = request.forms.get('name', None)
-		
+
 		if not email or not name:
 			return template('./templates/login', error="Email or name was missing")
-		
+
 		if not email.startswith("mailto:"):
 			email = "mailto:%s" % email
-		users.insert({"username":username, "pwd": generate_password_hash(pwd), 
+		users.insert({"username":username, "pwd": generate_password_hash(pwd),
 					  "email":email, "name":name})
 	s['username'] = username
 	s.save()
@@ -130,7 +130,7 @@ def getlogout():
 def me():
 	s = request.environ.get('beaker.session')
 	username = s.get('username',None)
-	if not username: 
+	if not username:
 		redirect('/login')
 	theid = request.params.get('uri', None)
 	my_badges = False
@@ -138,7 +138,7 @@ def me():
 	if theid:
 		c = util.getComp(theid, user=username)
 
-		if theid == "http://12.109.40.34/competency-framework/xapi/tetris":
+		if theid == "http://40.129.74.199:8080/competency-framework/xapi/tetris":
 			my_badges = True
 		return template('./templates/comp', username=username, fwk=c, my_badges=my_badges)
 
@@ -149,10 +149,10 @@ def me():
 def my_badges():
 	s = request.environ.get('beaker.session')
 	username = s.get('username',None)
-	if not username: 
+	if not username:
 		redirect('/login')
 
-	perfwk = db.perfwk.find_one({"entry":"http://12.109.40.34/performance-framework/xapi/tetris"})
+	perfwk = db.perfwk.find_one({"entry":"http://40.129.74.199:8080/performance-framework/xapi/tetris"})
 	levels = lines = scores = times = total = 0
 	for component in perfwk["components"]:
 		if component["id"] == "comp_levels":
@@ -171,8 +171,8 @@ def my_badges():
 
 
 	performance.updatePerformance(settings.PERFORMANCE_FWKS["tetris"], username)
-	comps = util.getComp("http://12.109.40.34/competency-framework/xapi/tetris", username)
-	
+	comps = util.getComp("http://40.129.74.199:8080/competency-framework/xapi/tetris", username)
+
 	my_levels = my_lines = my_scores = my_times = my_total = 0
 	for competency in comps["competencies"]:
 		if competency["title"] == "Experience API Tetris Level Competency":
@@ -200,17 +200,17 @@ def my_badges():
 def updatecomp():
 	s = request.environ.get('beaker.session')
 	username = s.get('username',None)
-	if not username: 
+	if not username:
 		redirect('/login')
 	endpoint = request.forms.get('endpoint', None)
 	auth = "Basic %s" % base64.b64encode("%s:%s" % (request.forms.get('name', None), request.forms.get('password', None)))
 	fwkid = request.forms.get('fwkid', None)
-	
+
 	c = util.getComp(fwkid, user=username)
 	util.updateCompFwkStatus(username, c, endpoint+"statements", auth)
 
 	my_badges = False
-	if fwkid == "http://12.109.40.34/competency-framework/xapi/tetris":
+	if fwkid == "http://40.129.74.199:8080/competency-framework/xapi/tetris":
 		my_badges = True
 
 	return template('./templates/comp', username=username, fwk=c, my_badges=my_badges)
@@ -227,8 +227,8 @@ def gettest():
 	print theid
 	if not theid and not fwkid:
 		redirect('/')
-	
-	# because this is a demo, we pick with framework we can 
+
+	# because this is a demo, we pick with framework we can
 	# do a LR lookup on
 	if fwkid == 'http://adlnet.gov/competency-framework/scorm/choosing-an-lms':
 		user = db.users.find_one({"username":username})
@@ -238,7 +238,7 @@ def gettest():
 		#auth = settings.AUTHORIZATION
 		if urls:
 			return template('./templates/videolist.tpl', user=username, compid=theid, actor=json.dumps(actor), urls=urls)
-	
+
 	if theid == 'http://adlnet.gov/competency/computer-science/understanding-variables':
 		return template('./templates/understanding-variables.tpl', compid=theid, fwkid=fwkid, user=username)
 	elif theid == 'http://adlnet.gov/competency/computer-science/case-statements':
@@ -307,7 +307,7 @@ def reset():
 	s = request.environ.get('beaker.session')
 	s.invalidate()
 	mongo.drop_database(db)
-	util.parsePerformanceFwk()	
+	util.parsePerformanceFwk()
 	redirect('/')
 
 @bottle.get('/admin')
