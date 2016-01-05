@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PerformanceFramework 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ns.medbiq.org/performanceframework/v1/ performanceframework.xsd"
+	xmlns="http://ns.medbiq.org/performanceframework/v1/"
+	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+	xmlns:cf="http://ns.medbiq.org/competencyframework/v1/"
+	xmlns:cobj="http://ns.medbiq.org/competencyobject/v1/"
+	xmlns:xhtml="http://www.w3.org/1999/xhtml"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<lom:lom>
+		<lom:general>
+			<lom:identifier>
+				<lom:catalog>URI</lom:catalog>
+				<lom:entry>http://12.109.40.34/performance-framework/xapi/tetris</lom:entry>
+			</lom:identifier>
+			<lom:title>
+				<lom:string language="en">
+					Experience API Tetris Levels Performance Framework
+				</lom:string>
+			</lom:title>
+			<lom:description>
+				<lom:string language="en">
+					This framework represents achievements of obtaining certain levels in the xAPI Tetris.
+				</lom:string>
+			</lom:description>
+		</lom:general>
+	</lom:lom>
+	<SupportingInformation>
+		<Reference>
+			<rdf:Description rdf:about="act:adlnet.gov/JsTetris_XAPI"/>
+			<dcterms:format>text/html</dcterms:format>
+		</Reference>
+	</SupportingInformation>
+	<PerformanceScale id="levels">
+		<LeastCompetent>5</LeastCompetent>
+		<MostCompetent>20</MostCompetent>
+	</PerformanceScale>
+	<PerformanceScale id="lines">
+		<LeastCompetent>20</LeastCompetent>
+		<MostCompetent>100</MostCompetent>
+	</PerformanceScale>
+	<PerformanceScale id="scores">
+		<LeastCompetent>50000</LeastCompetent>
+		<MostCompetent>2000000</MostCompetent>
+	</PerformanceScale>
+	<PerformanceScale id="times">
+		<LeastCompetent>180</LeastCompetent>
+		<MostCompetent>900</MostCompetent>
+	</PerformanceScale>
+	<Component id="comp_levels">
+		<Title>Passed an impressive amount of levels</Title>
+		<Competency>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency/xapi/tetris/levels"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyobject/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency-framework/xapi/tetris"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyframework/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+		</Competency>
+		<PerformanceLevelSet>
+			<PerformanceScaleReference>levels</PerformanceScaleReference>
+			<PerformanceLevel>
+				<DisplayOrder>1</DisplayOrder>
+				<Score>
+					<SingleValue>5</SingleValue>
+				</Score>
+				<Indicator id="lvl_5">
+					<Description>Made it to level 5 of Tetris</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>2</DisplayOrder>
+				<Score>
+					<SingleValue>10</SingleValue>
+				</Score>
+				<Indicator id="lvl_10">
+					<Description>Made it to level 10 of Tetris</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>3</DisplayOrder>
+				<Score>
+					<SingleValue>15</SingleValue>
+				</Score>
+				<Indicator id="lvl_15">
+					<Description>Made it to level 15 of Tetris</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>4</DisplayOrder>
+				<Score>
+					<SingleValue>20</SingleValue>
+				</Score>
+				<Indicator id="lvl_20">
+					<Description>Made it to level 20 of Tetris</Description>
+				</Indicator>
+			</PerformanceLevel>
+		</PerformanceLevelSet>
+	</Component>
+	<Component id="comp_lines">
+		<Title>Made a bunch of lines.</Title>
+		<Competency>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency/xapi/tetris/lines"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyobject/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency-framework/xapi/tetris"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyframework/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+		</Competency>
+		<PerformanceLevelSet>
+			<PerformanceScaleReference>lines</PerformanceScaleReference>
+			<PerformanceLevel>
+				<DisplayOrder>1</DisplayOrder>
+				<Score>
+					<SingleValue>20</SingleValue>
+				</Score>
+				<Indicator id="lines_20">
+					<Description>Made 20 lines</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>2</DisplayOrder>
+				<Score>
+					<SingleValue>40</SingleValue>
+				</Score>
+				<Indicator id="lines_40">
+					<Description>Made 40 lines</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>3</DisplayOrder>
+				<Score>
+					<SingleValue>60</SingleValue>
+				</Score>
+				<Indicator id="lines_60">
+					<Description>Made 60 lines</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>4</DisplayOrder>
+				<Score>
+					<SingleValue>80</SingleValue>
+				</Score>
+				<Indicator id="lines_80">
+					<Description>Made 80 lines</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>5</DisplayOrder>
+				<Score>
+					<SingleValue>100</SingleValue>
+				</Score>
+				<Indicator id="lines_100">
+					<Description>Made 100 lines</Description>
+				</Indicator>
+			</PerformanceLevel>
+		</PerformanceLevelSet>
+	</Component>
+	<Component id="comp_scores">
+		<Title>Worthy score.</Title>
+		<Competency>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency/xapi/tetris/score"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyobject/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency-framework/xapi/tetris"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyframework/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+		</Competency>
+		<PerformanceLevelSet>
+			<PerformanceScaleReference>scores</PerformanceScaleReference>
+			<PerformanceLevel>
+				<DisplayOrder>1</DisplayOrder>
+				<Score>
+					<SingleValue>50000</SingleValue>
+				</Score>
+				<Indicator id="points_50000">
+					<Description>Got 50,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>2</DisplayOrder>
+				<Score>
+					<SingleValue>100000</SingleValue>
+				</Score>
+				<Indicator id="points_100000">
+					<Description>Got 100,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>3</DisplayOrder>
+				<Score>
+					<SingleValue>200000</SingleValue>
+				</Score>
+				<Indicator id="points_200000">
+					<Description>Got 200,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>4</DisplayOrder>
+				<Score>
+					<SingleValue>400000</SingleValue>
+				</Score>
+				<Indicator id="points_400000">
+					<Description>Got 400,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>5</DisplayOrder>
+				<Score>
+					<SingleValue>800000</SingleValue>
+				</Score>
+				<Indicator id="points_800000">
+					<Description>Got 800,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>6</DisplayOrder>
+				<Score>
+					<SingleValue>1000000</SingleValue>
+				</Score>
+				<Indicator id="points_1000000">
+					<Description>Got 1,000,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>7</DisplayOrder>
+				<Score>
+					<SingleValue>1500000</SingleValue>
+				</Score>
+				<Indicator id="points_1500000">
+					<Description>Got 1,500,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>8</DisplayOrder>
+				<Score>
+					<SingleValue>2000000</SingleValue>
+				</Score>
+				<Indicator id="points_2000000">
+					<Description>Got 2,000,000 points</Description>
+				</Indicator>
+			</PerformanceLevel>
+		</PerformanceLevelSet>
+	</Component>
+	<Component id="comp_times">
+		<Title>Played for a long time.</Title>
+		<Competency>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency/xapi/tetris/time"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyobject/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+			<Reference>
+				<rdf:Description rdf:about="http://12.109.40.34/competency-framework/xapi/tetris"/>
+				<rdf:Type rdf:resource="http://ns.medbiq.org/competencyframework/v1/"/>
+				<dcterms:format>application/xml</dcterms:format>
+			</Reference>
+		</Competency>
+		<PerformanceLevelSet>
+			<PerformanceScaleReference>times</PerformanceScaleReference>
+			<PerformanceLevel>
+				<DisplayOrder>1</DisplayOrder>
+				<Score>
+					<SingleValue>180</SingleValue>
+				</Score>
+				<Indicator id="minutes_3">
+					<Description>3 minute game</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>2</DisplayOrder>
+				<Score>
+					<SingleValue>360</SingleValue>
+				</Score>
+				<Indicator id="minutes_6">
+					<Description>6 minute game</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>3</DisplayOrder>
+				<Score>
+					<SingleValue>450</SingleValue>
+				</Score>
+				<Indicator id="minutes_9">
+					<Description>9 minute game</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>4</DisplayOrder>
+				<Score>
+					<SingleValue>720</SingleValue>
+				</Score>
+				<Indicator id="minutes_12">
+					<Description>12 minute game</Description>
+				</Indicator>
+			</PerformanceLevel>
+			<PerformanceLevel>
+				<DisplayOrder>5</DisplayOrder>
+				<Score>
+					<SingleValue>900</SingleValue>
+				</Score>
+				<Indicator id="minutes_15">
+					<Description>15 minute game</Description>
+				</Indicator>
+			</PerformanceLevel>
+		</PerformanceLevelSet>
+	</Component>
+</PerformanceFramework>
