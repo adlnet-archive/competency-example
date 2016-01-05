@@ -234,6 +234,8 @@ def gettest():
 		user = db.users.find_one({"username":username})
 		actor = {'mbox':user['email'], 'name':user['name']}
 		urls = util.getContentURLsFromLR(theid)
+		#endpoint = settings.LRS_STATEMENT_ENDPOINT
+		#auth = settings.AUTHORIZATION
 		if urls:
 			return template('./templates/videolist.tpl', user=username, compid=theid, actor=json.dumps(actor), urls=urls)
 	
