@@ -1,0 +1,25 @@
+<CompetencyObject xmlns="http://ns.medbiq.org/competencyobject/v1/" 
+	xmlns:lom="http://ltsc.ieee.org/xsd/LOM" 
+	xmlns:ex="http://ltsc.ieee.org/xsd/LOM/extend" 
+	xmlns:ag="http://ltsc.ieee.org/xsd/LOM/unique" 
+	xmlns:voc="http://ltsc.ieee.org/xsd/LOM/vocab" 
+	xmlns:a="http://ns.medbiq.org/address/v1/" 
+	xmlns:hx="http://ns.medbiq.org/lom/extend/v1/" 
+	xmlns:hv="http://ns.medbiq.org/lom/vocab/v1/" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://ns.medbiq.org/competencyobject/v1/_object.xsd"> 
+	<lom:lom> 
+		<lom:general> 
+			<lom:identifier> 
+				<lom:catalog>URI</lom:catalog> 
+				<lom:entry>http://adlnet.gov/competency/scorm/choosing-an-lms/part2</lom:entry> 
+			</lom:identifier> 
+			<lom:title> 
+				<lom:string language="en">Choosing an LMS - part 2</lom:string> 
+			</lom:title> 
+			<lom:description> 
+				<lom:string language="en">Second part of the Choosing an LMS series.</lom:string> 
+			</lom:description> 
+		</lom:general>
+	</lom:lom> 
+</CompetencyObject> 
