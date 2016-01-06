@@ -29,7 +29,7 @@
 	</lom:lom>
 	<SupportingInformation>
 		<Reference>
-			<rdf:Description rdf:about="act:adlnet.gov/JsTetris_XAPI"/>
+			<rdf:Description rdf:about="http://adlnet.gov/JsTetris_XAPI"/>
 			<dcterms:format>text/html</dcterms:format>
 		</Reference>
 	</SupportingInformation>
