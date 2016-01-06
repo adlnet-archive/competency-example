@@ -10,22 +10,22 @@
 
 
 <!-- support scripts -->
-<script type="text/javascript" src="../../comprepo/competency-example/js/2.5.3-crypto-sha1.js"></script>
-<script type="text/javascript" src="../../comprepo/competency-example/js/base64.js"></script>
+<script type="text/javascript" src="../../js/2.5.3-crypto-sha1.js"></script>
+<script type="text/javascript" src="../../js/base64.js"></script>
 <script src="http://popcornjs.org/code/dist/popcorn-complete.min.js"></script>
 <script src="http://code.jquery.com/jquery.js"></script>
 
 <!-- ADL scripts -->
-<script type="text/javascript" src="../../comprepo/competency-example/js/verbs.js"></script>
-<script type="text/javascript" src="../../comprepo/competency-example/js/xapiwrapper.js"></script>
-<script type="text/javascript" src="../../comprepo/competency-example/js/xapipopcorn.js"></script>
+<script type="text/javascript" src="../../js/verbs.js"></script>
+<script type="text/javascript" src="../../js/xapiwrapper.js"></script>
+<script type="text/javascript" src="../../js/xapipopcorn.js"></script>
 
 <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-<script>    
+<script>
     $(document).ready(function(){
     	if (ADL.XAPIWrapper.lrs['actor'] === undefined) {
         	ADL.XAPIWrapper.lrs['actor'] = JSON.stringify({"mbox":"mailto:anon@example.com", "name":"anonymous"});
@@ -41,9 +41,8 @@
         }
 
         var comp = Popcorn.youtube("#compvid", "http://www.youtube.com/watch?v=tlBbt5niQto");
-
-		comp.autoplay(false); 
-		comp.media.src = "http://www.youtube.com/watch?v=tlBbt5niQto"; 
+		comp.autoplay(false);
+		comp.media.src = "http://www.youtube.com/watch?v=tlBbt5niQto";
 		ADL.XAPIVideo.addVideo(comp, "http://adlnet.gov/competency/scorm/choosing-an-lms/part5");
 
         $("#creds").hide();
@@ -59,7 +58,7 @@
 			var agentmbox = "mailto:" + $("#actormbox").val();
 
 			ADL.XAPIWrapper.changeConfig({"endpoint": endpoint, "user": username, "password": password, "actor": JSON.stringify({"mbox":agentmbox, "name":agentname})});
-			
+
 			$("#creds").hide();
 			$("#name").html(getName());
 			$("#lrs").html(ADL.XAPIWrapper.lrs.endpoint);
@@ -99,7 +98,7 @@
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 </nav>
 <div class="container">
-        <div class="starter-template" style="padding:40px 15px;text-align:center;">        
+        <div class="starter-template" style="padding:40px 15px;text-align:center;">
             <div style="width:450px;height:360px;margin:0 auto;" id="compvid"></div>
             <div id="displayDiv">
 		Playing as: <strong><span id="name"></span></strong>. Sending data to: <strong><span id="lrs"></span></strong> <a href="javascript:void(0)" id="changeCreds">change</a>
