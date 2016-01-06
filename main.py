@@ -225,12 +225,13 @@ def gettest():
 	fwkid = request.params.get('fwkid', None)
 	theid = request.params.get('compid', None)
 	print theid
+	print fwkid
 	if not theid and not fwkid:
 		redirect('/')
 
 	# because this is a demo, we pick with framework we can
 	# do a LR lookup on
-	if fwkid == 'http://adlnet.gov/competency-framework/scorm/choosing-an-lms':
+	if fwkid == 'http://40.129.74.199:8080/competency-framework/scorm/choosing-an-lms':
 		user = db.users.find_one({"username":username})
 		actor = {'mbox':user['email'], 'name':user['name']}
 		urls = util.getContentURLsFromLR(theid)
@@ -239,17 +240,17 @@ def gettest():
 		if urls:
 			return template('./templates/videolist.tpl', user=username, compid=theid, actor=json.dumps(actor), urls=urls)
 
-	if theid == 'http://adlnet.gov/competency/computer-science/understanding-variables':
+	if theid == 'http://40.129.74.199:8080/competency/computer-science/understanding-variables':
 		return template('./templates/understanding-variables.tpl', compid=theid, fwkid=fwkid, user=username)
-	elif theid == 'http://adlnet.gov/competency/computer-science/case-statements':
+	elif theid == 'http://40.129.74.199:8080/competency/computer-science/case-statements':
 		return template('./templates/case-statements.tpl', compid=theid, fwkid=fwkid, user=username)
-	elif theid == 'http://adlnet.gov/competency/computer-science/if-else':
+	elif theid == 'http://40.129.74.199:8080/competency/computer-science/if-else':
 		return template('./templates/if-else.tpl', compid=theid, fwkid=fwkid, user=username)
-	elif theid == 'http://adlnet.gov/competency/computer-science/for-loop':
+	elif theid == 'http://40.129.74.199:8080/competency/computer-science/for-loop':
 		return template('./templates/for-loop.tpl', compid=theid, fwkid=fwkid, user=username)
-	elif theid == 'http://adlnet.gov/competency/computer-science/while-loop':
+	elif theid == 'http://40.129.74.199:8080/competency/computer-science/while-loop':
 		return template('./templates/while-loop.tpl', compid=theid, fwkid=fwkid, user=username)
-	elif theid == 'http://adlnet.gov/competency/computer-science/understanding-functions':
+	elif theid == 'http://40.129.74.199:8080/competency/computer-science/understanding-functions':
 		return template('./templates/understanding-functions.tpl', compid=theid, fwkid=fwkid, user=username)
 
 	return template('./templates/test.tpl', compid=theid, fwkid=fwkid, user=username)
