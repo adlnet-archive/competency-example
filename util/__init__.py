@@ -256,6 +256,7 @@ def parseCompetencies(uri):
 	return competencies
 
 def parse(xmlbit):
+	# print('in xmlbit \n %s' % xmlbit)
 	obj = {}
 	obj['type'] = 'framework' if 'CompetencyFramework' in xmlbit.tag else 'competency'
 	obj['catalog'] = middleStuff(xmlbit)
@@ -270,6 +271,7 @@ def parse(xmlbit):
 		url = addXMLSuffix(include.find('cf:Entry', namespaces=namespaces).text.strip())
 		# HACK FOR ADL NETWORK
 		try:
+			# print('in includes urls stuff: \n %s' % url)
 			nxt = ET.fromstring(requests.get(url).text)
 		except Exception, e:
 			if not 'www.' in url:
