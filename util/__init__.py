@@ -226,10 +226,14 @@ def getContentURLsFromLR(compuri):
 	# get ids of documents w/ uri
 	#https://node01.public.learningregistry.net/slice?any_tags=http://www.adlnet.gov/competency/scorm/choosing-an-lms/part3
 	#####!!!!!!! hack
-	compuri = compuri[:7] + 'www.' + compuri[7:]
+	# compuri = compuri[:7] + 'www.' + compuri[7:]
+	from urlparse import urlparse
+	u = urlparse(compuri)
+	# compuri = u.scheme + '://www.adlnet.gov' + u.path
+	compuri = u.path
 	#####!!!!!!!! end hack
 	# url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
-	url = "https://node02.public.learningregistry.net/slice?any_tags=%s" % compuri
+	url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
 	resp = requests.get(url)
 	if resp.status_code != 200:
 		return None
@@ -256,7 +260,6 @@ def parseCompetencies(uri):
 	return competencies
 
 def parse(xmlbit):
-	# print('in xmlbit \n %s' % xmlbit)
 	obj = {}
 	obj['type'] = 'framework' if 'CompetencyFramework' in xmlbit.tag else 'competency'
 	obj['catalog'] = middleStuff(xmlbit)
@@ -271,7 +274,6 @@ def parse(xmlbit):
 		url = addXMLSuffix(include.find('cf:Entry', namespaces=namespaces).text.strip())
 		# HACK FOR ADL NETWORK
 		try:
-			# print('in includes urls stuff: \n %s' % url)
 			nxt = ET.fromstring(requests.get(url).text)
 		except Exception, e:
 			if not 'www.' in url:

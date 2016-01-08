@@ -32,7 +32,7 @@ def getStatements(objuri, username):
     actor = urllib.quote_plus(json.dumps({'mbox':mbox}))
     query_string = '?agent={0}&verb={1}&activity={2}&related_activities={3}'
     # tetris doesn't use expapi
-    finishedverb = 'http://adlnet.gov/xapi/verbs/completed'
+    finishedverb = 'http://adlnet.gov/expapi/verbs/completed'
     finishedquery = query_string.format(actor, finishedverb, objuri, 'true')
 
     endpoint = settings.LRS_STATEMENT_ENDPOINT
