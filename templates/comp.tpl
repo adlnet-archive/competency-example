@@ -15,7 +15,8 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Competency</a>
+<a class="navbar-brand" href="/">Main</a>
+<a href="/me" class="navbar-brand">My Competencies</a>
 </nav>
 <div class="jumbotron">
 	<div class="container">
@@ -26,32 +27,31 @@
 				Congrats! You've achieved all the competencies in this list!
 			</div>
 		%else:
-			%if username:
-			<!-- work in progress
-			<p><a href="/me?update={{fwk['encodedentry']}}" class="btn btn-primary" role="button">Check for Updates</a></p>
-			-->
-			<form class="form-inline" role="form" method="post" action="/update">
-				<input type="hidden" name="fwkid" class="form-control" value="{{fwk['entry']}}">
-				<div class="form-group">
-					<label class="sr-only" for="endpoint">LRS Endpoint</label>
-					<input type="text" class="form-control" name="endpoint" id="endpoint" placeholder="http://lrs.adlnet.gov/xapi/" required>
-				</div>
-				<br>
-				<div class="form-group">
-					<label class="sr-only" for="email">Basic Auth Name</label>
-					<input type="text" class="form-control" name="name" id="name" placeholder="name" required>
-				</div>
-				<div class="form-group">
-					<label class="sr-only" for="name">Basic Auth Password</label>
-					<input type="password" class="form-control" name="password" id="password" placeholder="password" required>
-				</div>
-				<button type="submit" class="btn btn-default">Update</button>
-			</form>
-			%end
+ 			%if username:
+ 			<form class="form-inline" role="form" method="post" action="/update">
+ 				<input type="hidden" name="fwkid" class="form-control" value="{{fwk['entry']}}">
+ 				<div class="form-group">
+ 					<input type="hidden" class="form-control" name="endpoint" id="endpoint" value="http://lrs.adlnet.gov/xapi/" required>
+ 					<input type="hidden" class="form-control" name="name" id="name" value="tom" required>
+ 					<input type="hidden" class="form-control" name="password" id="password" value="1234" required>
+ 				</div>
+ 				<button type="submit" class="btn btn-default">Update</button>
+ 			</form>
+ 			%end
 		%end
 	</div>
 </div>
 <div class="container">
+	%if my_badges:
+		<a href="/mybadges" class="btn btn-primary" role="button">My Tetris Badges</a>
+		<br>
+		<br>
+		<!--Replace href with url of tetris game-->
+		<a href="https://lrs.adlnet.gov/prototypes/" class="btn btn-primary" role="button" target="_blank">Play Tetris!</a>	
+		<br>
+		<br>
+		<a class="btn btn-primary" href="/badges" role="button">All Badges</a>
+	%else:
 	%for comp in fwk['competencies']:
 		%if comp['type'] == 'framework': 
 			<div class="row">
@@ -107,6 +107,7 @@
 				</div>
 			</div>
 		%end
+	%end
 	%end
 </div>
 </body>

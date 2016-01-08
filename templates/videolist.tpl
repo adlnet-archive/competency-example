@@ -15,7 +15,7 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-<a class="navbar-brand" href="/">Competency</a>
+<a href="/me" class="navbar-brand">My Competencies</a>
 <p class="navbar-text navbar-right">Signed in as {{user}}</p>
 </nav>
 <div class="container">

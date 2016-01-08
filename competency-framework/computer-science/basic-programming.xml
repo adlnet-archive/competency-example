@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompetencyFramework xmlns="http://ns.medbiq.org/competencyframework/v1/"
+					 xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+					 xmlns:hx="http://ns.medbiq.org/lom/extend/v1/"
+					 xmlns:xhtml="http://www.w3.org/1999/xhtml"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					 xsi:schemaLocation="http://ns.medbiq.org/competencyframework/v1/ competencyframework.xsd http://ltsc.ieee.org/xsd/LOM http://ns.medbiq.org/lom/healthcarelom.xsd http://ns.medbiq.org/lom/extend/v1/ http://ns.medbiq.org/lom/healthcare/healthcaremetadata.xsd http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd">
+	<lom:lom>
+		<lom:general>
+			<lom:identifier>
+				<lom:catalog>URI</lom:catalog>
+				<lom:entry>http://40.129.74.199:8080/competency-framework/computer-science/basic-programming</lom:entry>
+			</lom:identifier>
+			<lom:title>
+				<lom:string language="en">Basic Programming</lom:string>
+			</lom:title>
+			<lom:description>
+				<lom:string language="en">Basic Programming describes the set of skills needed to create basic computer programs.</lom:string>
+			</lom:description>
+		</lom:general>
+		<lom:lifeCycle>
+			<lom:version>
+				<lom:string>1.0</lom:string>
+			</lom:version>
+			<lom:contribute>
+				<lom:entity>Advanced Distributed Learning</lom:entity>
+				<lom:role>
+					<lom:source>LOMv1.0</lom:source>
+					<lom:value>publisher</lom:value>
+				</lom:role>
+			</lom:contribute>
+		</lom:lifeCycle>
+		<lom:rights>
+			<lom:copyrightAndOtherRestrictions>
+				<lom:source>LOMv1.0</lom:source>
+				<lom:value>yes</lom:value>
+			</lom:copyrightAndOtherRestrictions>
+			<lom:description>
+				<lom:string language="en">Creative Commons Attribution 3.0 Unported license, http://creativecommons.org/licenses/by/3.0/</lom:string>
+			</lom:description>
+		</lom:rights>
+	</lom:lom>
+	<EffectiveDate>2013-11-19</EffectiveDate>
+	<SupportingInformation>
+		<xhtml:div>
+			<xhtml:p>ADL has created a set of skills needed to successfully begin programming for computers.</xhtml:p>
+		</xhtml:div>
+	</SupportingInformation>
+	<Includes>
+		<Catalog>URI</Catalog>
+		<Entry>http://40.129.74.199:8080/competency/computer-science/understanding-variables</Entry>
+	</Includes>
+	<Includes>
+		<Catalog>URI</Catalog>
+		<Entry>http://40.129.74.199:8080/competency-framework/computer-science/understanding-flow-control</Entry>
+	</Includes>
+	<Includes>
+		<Catalog>URI</Catalog>
+		<Entry>http://40.129.74.199:8080/competency/computer-science/understanding-functions</Entry>
+	</Includes>
+	<Relation>
+		<Reference1>
+			<Catalog>URI</Catalog>
+			<Entry>http://40.129.74.199:8080/competency-frameworks/computer-science/basic-programming</Entry>
+		</Reference1>
+		<Relationship>http://www.w3.org/2004/02/skos/core#narrower</Relationship>
+		<Reference2>
+			<Catalog>URI</Catalog>
+			<Entry>http://40.129.74.199:8080/competency/computer-science/understanding-variables</Entry>
+		</Reference2>
+	</Relation>
+	<Relation>
+		<Reference1>
+			<Catalog>URI</Catalog>
+			<Entry>http://40.129.74.199:8080/competency-frameworks/computer-science/basic-programming</Entry>
+		</Reference1>
+		<Relationship>http://www.w3.org/2004/02/skos/core#narrower</Relationship>
+		<Reference2>
+			<Catalog>URI</Catalog>
+			<Entry>http://40.129.74.199:8080/competency-framework/computer-science/understanding-flow-control</Entry>
+		</Reference2>
+	</Relation>
+	<Relation>
+		<Reference1>
+			<Catalog>URI</Catalog>
+			<Entry>http://40.129.74.199:8080/competency-frameworks/computer-science/basic-programming</Entry>
+		</Reference1>
+		<Relationship>http://www.w3.org/2004/02/skos/core#narrower</Relationship>
+		<Reference2>
+			<Catalog>URI</Catalog>
+			<Entry>http://40.129.74.199:8080/competency/computer-science/understanding-functions</Entry>
+		</Reference2>
+	</Relation>
+</CompetencyFramework>
