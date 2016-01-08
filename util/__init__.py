@@ -231,11 +231,9 @@ def getContentURLsFromLR(compuri):
 	u = urlparse(compuri)
 	# compuri = u.scheme + '://www.adlnet.gov' + u.path
 	compuri = u.path
-	print('here it is "fixed": %s' % compuri)
 	#####!!!!!!!! end hack
 	# url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
 	url = "https://node01.public.learningregistry.net/slice?any_tags=%s" % compuri
-	print('search url: %s' % url)
 	resp = requests.get(url)
 	if resp.status_code != 200:
 		return None
